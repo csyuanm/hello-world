@@ -1,0 +1,40 @@
+Running a script in NetSuite includes these basic steps:
+ Step 1: Create Your Script
+ Step 2: Add Script to NetSuite File Cabinet
+ Step 3: Attach Script to Form
+ Step 4: Create Script Record
+ Step 5: Define Script Deployment
+
+步骤1：创建脚本 ---单独的js文件
+步骤2：将脚本添加到NetSuite文件柜  ---类似于在网页中上传文件
+步骤3：将脚本附加到表单中
+步骤4：创建脚本记录
+步骤5：定义脚本部署
+
+
+
+此文档将所有SuiteScript功能整合到功能类别中
+下面列出。请注意，一些API出现在多个类别中。例如，
+nlapiLookupField（）出现在Field API和Search API类别中，但是它们都是
+记录一次。
+?使用整个记录对象 - 请参阅记录API
+?使用子记录 - 请参阅Subrecord API
+?处理记录中的字段 - 请参阅字段API
+?在记录上使用子列表 - 请参阅子列表API
+?在NetSuite中进行搜索 - 请参阅搜索API
+?计划脚本以指定时间运行 - 请参阅计划API
+?获取有关脚本，用户和帐户的上下文信息 - 请参阅执行上下文
+蜜蜂
+?在Suitelet中构建一个NetSuite的用户界面 - 请参阅UI Builder API
+?设置应用程序导航 - 请参阅应用导航API
+?使用Date和String对象 - 请参阅Date API
+?使用备用时区 - 请参阅时区API
+?使用货币 - 参见货币API
+?为应用程序添加安全性 - 请参阅加密API
+?使用XML - 参见XML API
+?使用新的或现有的文件 - 请参阅文件API
+?添加错误处理 - 请参阅错误处理API
+?从NetSuite内部与外部系统通信 - 请参阅通信API
+?配置NetSuite帐户 - 请参阅配置API
+?与NetSuite工作流（SuiteFlow）管理器进行交互 - 请参阅SuiteFlow API
+?使用仪表板portlet - 参见Portlet API
