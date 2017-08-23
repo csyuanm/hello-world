@@ -20,6 +20,13 @@ public interface DingUserDao {
 	int insert(DingUserBean user);
 	
 	/**
+	 * 通过名字查找用户ID
+	 * @param name
+	 * @return
+	 */
+	String selectIDByName(String name);
+	
+	/**
 	 * 通过手机号码查找用户ID
 	 * @param mobile
 	 * @return userid

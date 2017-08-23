@@ -1,13 +1,29 @@
 package com.mml.dingding.service.impl;
 
+import java.io.Closeable;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.mml.dingding.common.Constants;
 import com.mml.dingding.common.DingDingAuth;
@@ -155,6 +171,105 @@ public class NetSuiteServiceImpl implements NetSuiteService{
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	@Override
+	public String getPurchaseList() {
+
+		Map accountMap = new HashMap();
+		accountMap.put("account", UserUtil.NS_COUNNET); //compayid=4556831
+		accountMap.put("email", UserUtil.NS_EMAIL); //登录email
+		accountMap.put("password", UserUtil.NS_PASS);//密码
+		accountMap.put("role", UserUtil.NS_ROLE); //roleid 默认填写18
+		String result = "";
+		String str = null;
+	    String access_token = Constants.getAccessToken();
+		HttpClient httpClient = new DefaultHttpClient();  
+		String process_code="PROC-GTHKCO8W-4MCN48TKOW9ZT0BK7NAF2-6XF1B76J-R";
+		HttpResponse response = null;
+		HttpEntity httpEntity = null;
+		HttpPost httppost = null;
+		List<String> approvers = new ArrayList<String>();
+		try { 
+			result = NetSuiteAuth.getAuth(accountMap, UserUtil.PURCHASEORDERAPPROVE, null);
+			JSONArray purchaseArray = JSONArray.fromObject(result);;
+			if(purchaseArray.size()>0){
+				JSONObject jsonPurchase = new JSONObject(); 
+				for(int i = 0; i < purchaseArray.size(); i++){
+					jsonPurchase = JSONObject.fromObject(purchaseArray.get(i));
+					 JSONObject approverObject = JSONObject.fromObject(jsonPurchase.get("columns"));
+					 if(approverObject.size()>0&&approverObject.has("custbodyapprover")){
+						 //获取审批人
+						 JSONArray approverArray = JSONArray.fromObject(approverObject.get("custbodyapprover"));
+						 if(approverArray.size()>0){
+							 for(int j = 0; j<approverArray.size(); j++){
+								 JSONObject approver = JSONObject.fromObject(approverArray.get(j));	
+								 String name = JSONObject.fromObject(approver).getString("name");
+								 //获取审批人id，通过什么样的方法获取id?
+						//		 String userid = dingUserDao.selectIDByName(name);
+						//		 approvers.add(userid);
+							}
+						 }
+						 String approverlist = StringUtils.collectionToDelimitedString(approvers, ",");
+						 //获取发起人id和其部门id
+						//获取发起人id、需要传入手机号码，与钉钉识别用手机号码做唯一识别？
+						JSONObject createdby = JSONObject.fromObject(approverObject.get("createdby"));
+						String createdbyName = JSONObject.fromObject(createdby).getString("name");
+						createdbyName = "蒙茂良";
+					//	String userid = dingUserDao.selectIDByName(createdbyName);
+						
+						String amount = JSONObject.fromObject(approverObject).getString("amount");
+						
+						JSONObject obj = new JSONObject();
+						obj.put("name", "报销金额");
+						obj.put("value", amount);
+						String url = "https://eco.taobao.com/router/rest?method=dingtalk.smartwork.bpms.processinstance.create&v=2.0&format=json&session="+access_token;
+						List<NameValuePair> params = new ArrayList<NameValuePair>();
+						params.add(new BasicNameValuePair("process_code", process_code));
+						params.add(new BasicNameValuePair("originator_user_id", "manager4417"));
+						params.add(new BasicNameValuePair("dept_id", "45988760"));
+						//params.add(new BasicNameValuePair("approvers", approverlist));
+						String approverslist = "manager4417,02402648081143016";
+						params.add(new BasicNameValuePair("approvers", approverslist));
+						params.add(new BasicNameValuePair("form_component_values", obj.toString()));
+						httppost = new HttpPost(url);
+						httppost.setEntity(new UrlEncodedFormEntity(params, "utf-8"));
+						System.out.println(httppost.getURI());
+						response = httpClient.execute(httppost);
+						httpEntity = response.getEntity();
+						str = EntityUtils.toString(httpEntity, "utf-8");
+						System.out.println(str);
+						JSONObject jresult =JSONObject.fromObject(str);
+						JSONObject temp =JSONObject.fromObject(jresult.get("result"));
+						String processId ="";
+						if(temp.has("process_instance_id")){
+							processId = temp.getString("process_instance_id");
+						}
+						
+						//获取"process_instance_id":"7b3c2e48-537d-4c2b-820f-0f7009dbd200"}
+						//返回id通过id判断是否发送
+					 }
+				}
+			}
+	    } catch (ClientProtocolException e) {  
+	        e.printStackTrace();  
+	    } catch (IOException e) {  
+	        e.printStackTrace();  
+	    } catch (URISyntaxException e) {
+			e.printStackTrace();
+	    } finally{
+	        try {
+	            if(httppost!=null){
+	            	httppost.releaseConnection(); // 关闭method 的 httpclient连接
+	            }
+	            if(httpClient!=null){
+	                ((Closeable) httpClient).close();
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	}
+		return null;
 	}
 
 }

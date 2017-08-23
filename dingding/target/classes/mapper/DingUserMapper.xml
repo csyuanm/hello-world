@@ -41,6 +41,11 @@
   select * from ding_user where userid = 1
   </select>
   
+  <!-- 通过名字获取id，待完善   是否可以通过名字先获取手机，然后在获取id？但是名字是否有多个？ -->
+  <select id="selectIDByName" parameterType="java.lang.String" resultType="java.lang.String">
+  	select userid from ding_user where name = #{name}
+  </select>
+  
   <select id="selectIDByPhone" parameterType="java.lang.String" resultType="java.lang.String">
   select userid from ding_user where mobile = #{mobile}
   </select>

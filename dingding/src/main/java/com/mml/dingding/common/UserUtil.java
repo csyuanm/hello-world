@@ -16,6 +16,8 @@ public class UserUtil {
 	//ns获取员工生日
 	public static String EMPLOYEEBIRTH = "https://rest.na2.netsuite.com/app/site/hosting/restlet.nl?script=235&deploy=1";
 	
+	public static String PURCHASEORDERAPPROVE = "https://rest.na2.netsuite.com/app/site/hosting/restlet.nl?script=244&deploy=1";
+	
 	
 	
 	public static String FULFILLURL = "";

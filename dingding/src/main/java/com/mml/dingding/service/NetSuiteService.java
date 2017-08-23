@@ -13,4 +13,10 @@ public interface NetSuiteService {
 	 * @return
 	 */
 	public String getEmployeeBirth();
+	
+	/**
+	 * 获取待审批采购订单列表
+	 * @return
+	 */
+	String getPurchaseList();
 }

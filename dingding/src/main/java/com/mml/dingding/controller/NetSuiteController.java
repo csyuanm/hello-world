@@ -1,5 +1,7 @@
 package com.mml.dingding.controller;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,5 +40,39 @@ public class NetSuiteController {
 		
 		return nsService.getEmployeeBirth();
 	}
+	
+	/**
+	 * 从netsuite获取待审批订单列表
+	 * 要获取字段：数量、货品、选项 、费率、金额
+	 * @return
+	 */
+	@RequestMapping("getPurchaseList")
+	public String getPurchaseList(){
+		
+		return nsService.getPurchaseList();
+	}
+	
+	/**
+	 * 从netsuite获取待审批订单列表
+	 * @return
+	 */
+	@RequestMapping("getList")
+	public String getList(){
+		String result = "";
+		Map accountMap = new HashMap();
+		accountMap.put("account", UserUtil.NS_COUNNET); //compayid=4556831
+		accountMap.put("email", UserUtil.NS_EMAIL); //登录email
+		accountMap.put("password", UserUtil.NS_PASS);//密码
+		accountMap.put("role", UserUtil.NS_ROLE); //roleid 默认填写18
+		try {
+			result = NetSuiteAuth.getAuth(accountMap, UserUtil.PURCHASEORDERAPPROVE, null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 }
 
