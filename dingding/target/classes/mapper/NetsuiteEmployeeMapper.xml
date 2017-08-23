@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mml.dingding.dao.NetsuiteEmployeeDao" >
+  <resultMap id="BaseResultMap" type="com.mml.dingding.model.NetsuiteEmployee" >
+    <result column="entityid" property="entityid" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="image" property="image" jdbcType="VARCHAR" />
+    <result column="supervisor" property="supervisor" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="mobilephone" property="mobilephone" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="subsidiary" property="subsidiary" jdbcType="VARCHAR" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="custentity12" property="custentity12" jdbcType="VARCHAR" />
+    <result column="hiredate" property="hiredate" jdbcType="VARCHAR" />
+    <result column="birthdate" property="birthdate" jdbcType="VARCHAR" />
+    <result column="comments" property="comments" jdbcType="VARCHAR" />
+    <result column="workcalendar" property="workcalendar" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    entityid, title, image, supervisor, email, mobilephone, phone, subsidiary, department, 
+    location, custentity12, hiredate, birthdate, comments, workcalendar
+  </sql>
+  
+  <insert id="insert" parameterType="java.util.Map" >
+    insert into netsuite_employee (entityid, title, image, 
+      email, mobilephone, 
+      phone, subsidiary, department, 
+      location, custentity12, hiredate, 
+      birthdate, comments, supervisor, workcalendar
+      )
+    values (#{entityid,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{mobilephone,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{subsidiary,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, 
+      #{location,jdbcType=VARCHAR}, #{custentity12,jdbcType=VARCHAR}, #{hiredate,jdbcType=VARCHAR}, 
+      #{birthdate,jdbcType=VARCHAR}, #{comments,jdbcType=VARCHAR}, #{supervisor,jdbcType=VARCHAR}, #{workcalendar,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <select id="checkRepeat" parameterType="java.lang.String" resultType="java.lang.Integer">
+  	select count(*) from netsuite_employee where mobilephone = #{mobilephone}
+  </select>
+  
+    <insert id="insertEmployee" parameterType="com.mml.dingding.model.NetsuiteEmployee" >
+    insert into netsuite_employee (entityid, title, image, 
+      email, mobilephone, 
+      phone, subsidiary, department, 
+      location, custentity12, hiredate, 
+      birthdate, comments, supervisor, workcalendar
+      )
+    values (#{entityid,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{mobilephone,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{subsidiary,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, 
+      #{location,jdbcType=VARCHAR}, #{custentity12,jdbcType=VARCHAR}, #{hiredate,jdbcType=VARCHAR}, 
+      #{birthdate,jdbcType=VARCHAR}, #{comments,jdbcType=VARCHAR}, #{supervisor,jdbcType=VARCHAR}, #{workcalendar,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <update id="update" parameterType="com.mml.dingding.model.NetsuiteEmployee">
+  update netsuite_employee 
+  <set>
+  <if test="supervisor != null">
+        supervisor = #{supervisor,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="subsidiary != null">
+        subsidiary = #{subsidiary,jdbcType=VARCHAR},
+      </if>
+  </set>
+  where entityid = #{entityid}
+  </update>
+
+ 
+</mapper>

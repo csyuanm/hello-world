@@ -1,0 +1,242 @@
+package com.mml.dingding.controller;
+
+import org.apache.log4j.Logger;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mml.dingding.common.Constants;
+import com.mml.dingding.model.ACRequest;
+
+@RestController
+@RequestMapping("/test")
+public class TestController {
+	private static Logger LOGGER = Logger.getLogger(TestController.class);
+	
+	
+    @RequestMapping("send")
+    public String send() throws Exception {
+
+        ACRequest acRequest = new ACRequest();
+        acRequest.setName("John");
+        acRequest.setFollowerUserId("123456");
+        acRequest.setMobile("110");
+        acRequest.setStateCode("+86");
+        JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(acRequest));
+        HttpResponse<String> response = Unirest.post("http://127.0.0.1/index/ac").queryString(jsonObject).asString();
+        return response.getBody() + ":" + response.getStatus();
+    }
+    
+    /**
+     * 测试发起审批实例
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("process")
+    public String sendDetail() throws Exception{
+    	
+    	String s = "02402648081143016,manager4417";
+    	String access_token = Constants.getAccessToken();
+    	String process_code="PROC-GTHKCO8W-4MCN48TKOW9ZT0BK7NAF2-6XF1B76J-R";
+    	String url="https://eco.taobao.com/router/rest?method=dingtalk.smartwork.bpms.processinstance.create&v=2.0&format=json&session="+access_token; //+"&process_code="+process_code 
+    	JSONArray jarray = new JSONArray();
+//    	for(int i =0; i<s.length; i++){
+//    		jarray.add(s[i]);
+//		}
+    	System.out.println("发送人为。。"+jarray);
+    	JSONObject obj = new JSONObject();
+		obj.put("name", "报销金额");
+		obj.put("value", "104352");
+		//obj.put("ext_value ", "总天数:1");
+		JSONObject jobj = new JSONObject();
+//		jobj.put("method", "dingtalk.smartwork.bpms.processinstance.create");
+//		jobj.put("session", access_token);
+//		jobj.put("v", "2.0");
+//		jobj.put("format", "json");
+		jobj.put("agent_id", 115257478);
+		jobj.put("process_code", process_code); //审批类id
+		jobj.put("originator_user_id", "02402648081143016"); //发起人id
+		jobj.put("dept_id", 45988760);//发起人所在部门
+		//jobj.put("approvers", jarray.toJSONString());  //审批人userid列表
+		//jobj.put("form_component_values", obj.toJSONString()); //审批内容
+		HttpResponse<String> response = Unirest.post(url)
+				.header("Access", "application/json")
+				.queryString(jobj)
+				.queryString("form_component_values",obj)  //json或者数组格式的需要在这里设置？？
+				.queryString("approvers",s)
+				.asString();
+		System.out.println("解析响应正文...."+response.getBody());
+		System.out.println("HTTP响应状态代码..."+response.getStatus());
+		System.out.println("HTTP响应状态文本..."+response.getStatusText());
+		System.out.println("HTTP响应标头..."+response.getHeaders());
+		System.out.println("未解析的响应正文..."+response.getRawBody());
+		System.out.println("解析响应正文...."+response.getBody());
+    	return response.toString();
+    }
+    
+    //添加外部联系人
+    @RequestMapping("addOuterMember")
+    public String addOuterMember(){
+    	String ret;
+    	String ret2;
+    	JSONObject obj = new JSONObject();
+    	obj.put("corpid",Constants.CORP_ID);
+    	obj.put("corpsecret", Constants.SECRET_ID);
+    	try {
+			HttpResponse<String> response = Unirest.get("https://oapi.dingtalk.com/gettoken")
+					.header("accept", "application/json")
+				//	.routeParam("corpid", Constants.CORP_ID)  value替换key
+					.queryString(obj) //传递的参数对象
+					.asString();
+			System.out.println("解析响应正文...."+response.getBody());
+			System.out.println("HTTP响应状态代码..."+response.getStatus());
+			System.out.println("HTTP响应状态文本..."+response.getStatusText());
+			System.out.println("HTTP响应标头..."+response.getHeaders());
+			System.out.println("未解析的响应正文..."+response.getRawBody());
+			JSONObject obj2 = JSONObject.parseObject(response.getBody());
+			String token = obj2.getString("access_token");
+			String s1 = "13908691234";
+			String s3 = "111";
+			Number[] n = {1};
+			JSONArray jsonArray = new JSONArray();  //讲数组格式保存在json中
+			for(int i =0; i<n.length; i++){
+				 jsonArray.add(n[i]);
+			}
+			JSONObject obj3 = new JSONObject();
+			obj3.put("label_ids", jsonArray);
+			obj3.put("name", "hahaha");
+			obj3.put("mobile", s1);
+			obj3.put("follower_userid", s3);
+			obj3.put("state_code", "86");
+			HttpResponse<JsonNode> res = Unirest.post("https://eco.taobao.com/router/rest?method=dingtalk.corp.ext.add&v=2.0&format=json&session="+token)
+					.header("access", "application/json")
+					.queryString("contact",obj3)
+					.asJson();
+
+			System.out.println("解析响应正文...."+res.getBody());
+			ret = res.getBody().toString();
+			return ret;
+		} catch (UnirestException e) {
+			e.printStackTrace();
+		}
+    	return "";
+    }
+    
+    /**
+     * 群回话
+     * @return
+     */
+    @RequestMapping("post")
+    public String doPost(){
+    	String ret;
+    	JSONObject obj = new JSONObject();
+    	obj.put("corpid",Constants.CORP_ID);
+    	obj.put("corpsecret", Constants.SECRET_ID);
+    	try {
+			HttpResponse<String> response = Unirest.get("https://oapi.dingtalk.com/gettoken")
+					.header("accept", "application/json")
+				//	.routeParam("corpid", Constants.CORP_ID)  value替换key
+					.queryString(obj) //传递的参数对象
+					.asString();
+			JSONObject obj2 = JSONObject.parseObject(response.getBody());
+			String token = obj2.getString("access_token");
+			String[] s = {"manager4417"};
+			JSONArray jsonArray = new JSONArray();  //讲数组格式保存在json中
+			for(int i =0; i<s.length; i++){
+				 jsonArray.add(s[i]);
+			}
+			JSONObject obj3 = new JSONObject();
+			obj3.put("name", "测试部门");
+			obj3.put("owner", "manager4417");
+			obj3.put("useridlist", jsonArray);
+//			obj3.put("follower_userid", s3);
+//			obj3.put("state_code", "86");
+			HttpResponse<JsonNode> res = Unirest.post("https://oapi.dingtalk.com/chat/create?access_token=973c27f6ede033fe9f471d5df5e367c5")
+					.header("access", "application/json")
+					.queryString(obj3)
+					.asJson();
+			System.out.println("....");
+			System.out.println("....");
+			System.out.println("解析响应正文...."+res.getBody());
+			ret = res.getBody().toString();
+			return ret;
+		} catch (UnirestException e) {
+			e.printStackTrace();
+		}
+    	return "";
+    }
+    
+    
+    
+    @RequestMapping("post2")
+    public String doPost2(){
+    	String ret;
+    	JSONObject obj = new JSONObject();
+    	obj.put("corpid",Constants.CORP_ID);
+    	obj.put("corpsecret", Constants.SECRET_ID);
+    	try {
+			HttpResponse<String> response = Unirest.get("https://oapi.dingtalk.com/gettoken")
+					.header("accept", "application/json")
+					.queryString(obj) //传递的参数对象
+					.asString();
+			System.out.println("解析响应正文...."+response.getBody());
+			System.out.println("HTTP响应状态代码..."+response.getStatus());
+			System.out.println("HTTP响应状态文本..."+response.getStatusText());
+			System.out.println("HTTP响应标头..."+response.getHeaders());
+			System.out.println("未解析的响应正文..."+response.getRawBody());
+			JSONObject obj2 = JSONObject.parseObject(response.getBody());
+			String token = obj2.getString("access_token");
+			String[] s = {"manager4417"};
+			
+			String url = "https://eco.taobao.com/router/rest?method=dingtalk.corp.message.corpconversation.asyncsend&v=2.0&format=json&session="+token;
+			JSONObject objall = new JSONObject();
+			JSONObject msg = new JSONObject();
+			JSONObject content = new JSONObject();
+			String[] userid = {"1"};
+			content.put("content", "生日祝福语");
+			
+			msg.put("msgtype", "text");
+			msg.put("text", content);
+			
+			//list.add("manager4417");
+			JSONArray jsonArray = new JSONArray();  //讲数组格式保存在json中
+			for(int i =0; i<s.length; i++){
+				 jsonArray.add(s[i]);
+			}
+			
+			objall.put("msgtype ", "text");
+			objall.put("agent_id", 115257477);
+			objall.put("user_id_list", jsonArray);
+			objall.put("msgcontent", msg);
+			
+			
+			JSONObject obj3 = new JSONObject();
+			obj3.put("name", "测试部门");
+			obj3.put("owner", "manager4417");
+			obj3.put("useridlist", jsonArray);
+//			obj3.put("follower_userid", s3);
+//			obj3.put("state_code", "86");
+			HttpResponse<JsonNode> res = Unirest.post("https://eco.taobao.com/router/rest?method=dingtalk.corp.message.corpconversation.asyncsend&v=2.0&format=json&session="+token)
+					.header("Access", "application/json")
+					.queryString(objall)
+					.asJson();
+			System.out.println("....");
+			System.out.println("....");
+			System.out.println("解析响应正文...."+res.getBody());
+			ret = res.getBody().toString();
+			return ret;
+		} catch (UnirestException e) {
+			e.printStackTrace();
+		}
+    	return "";
+    }
+    
+    
+}   
+
+    

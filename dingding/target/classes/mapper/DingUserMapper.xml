@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mml.dingding.dao.DingUserDao">
+  <resultMap id="BaseResultMap" type="com.mml.dingding.model.DingUserBean">
+    <id column="userid" jdbcType="VARCHAR" property="userid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="workpalce" jdbcType="VARCHAR" property="workpalce" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="orgEmail" jdbcType="VARCHAR" property="orgemail" />
+    <result column="active" jdbcType="BIT" property="active" />
+    <result column="orderInDepts" jdbcType="VARCHAR" property="orderindepts" />
+    <result column="isAdmin" jdbcType="BIT" property="isadmin" />
+    <result column="isBoss" jdbcType="BIT" property="isboss" />
+    <result column="dingId" jdbcType="VARCHAR" property="dingid" />
+    <result column="unionid" jdbcType="VARCHAR" property="unionid" />
+    <result column="isLeaderInDepts" jdbcType="BIT" property="isleaderindepts" />
+    <result column="isHide" jdbcType="BIT" property="ishide" />
+    <result column="department" jdbcType="VARCHAR" property="department" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="jobnumber" jdbcType="VARCHAR" property="jobnumber" />
+    <result column="extatt" jdbcType="VARCHAR" property="extatt" />
+    <result column="roles" jdbcType="VARCHAR" property="roles" />
+    <result column="roles_id" jdbcType="VARCHAR" property="rolesId" />
+    <result column="roles_name" jdbcType="VARCHAR" property="rolesName" />
+    <result column="roles_groupName" jdbcType="VARCHAR" property="rolesGroupname" />
+    <result column="isSenior" jdbcType="BIT" property="issenior" />
+    <result column="openId" jdbcType="VARCHAR" property="openId" />
+    <result column="order" jdbcType="VARCHAR" property="order" />
+    <result column="extattr" jdbcType="VARCHAR" property="extattr" />
+  </resultMap>
+ 
+   <select id="getDuser" parameterType="String" resultMap="BaseResultMap">
+  select * from ding_user where userid = #{id}
+  </select> 
+  
+  <select id="get" parameterType="java.lang.String" resultType="DingUserBean">
+  select * from ding_user where userid = 1
+  </select>
+  
+  <select id="selectIDByPhone" parameterType="java.lang.String" resultType="java.lang.String">
+  select userid from ding_user where mobile = #{mobile}
+  </select>
+  
+  <update id="updateDepapartment" parameterType="DingUserBean">
+  update ding_user 
+  <set>
+  <if test="roles != null">
+        roles = #{roles,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="rolesName != null">
+        roles_name = #{rolesName,jdbcType=VARCHAR},
+      </if>
+      <if test="extattr != null">
+        extattr = #{extattr,jdbcType=VARCHAR},
+      </if>
+  </set>
+  where userid = #{userid}
+  </update>
+  <insert id="forMap" parameterType="java.util.Map">
+    insert into ding_user (userid, name, tel, 
+      workpalce, remark, mobile, 
+      email, orgEmail, active, 
+      orderInDepts, isAdmin, isBoss, 
+      dingId, unionid, isLeaderInDepts, 
+      isHide, department, position, 
+      avatar, jobnumber, extatt, 
+      roles, roles_id, roles_name, 
+      roles_groupName, isSenior, extattr)
+    values (#{userid}, #{name}, #{tel}, 
+      #{workpalce}, #{remark}, #{mobile}, 
+      #{email}, #{orgemail}, #{active,jdbcType=BIT}, 
+      #{orderindepts}, #{isadmin,jdbcType=BIT}, #{isboss,jdbcType=BIT}, 
+      #{dingid}, #{unionid}, #{isleaderindepts,jdbcType=BIT}, 
+      #{ishide,jdbcType=BIT}, #{department}, #{position}, 
+      #{avatar}, #{jobnumber}, #{extatt}, 
+      #{roles}, #{rolesId}, #{rolesName}, 
+      #{rolesGroupname}, #{issenior,jdbcType=BIT}, #{extattr})
+  </insert>
+  
+  <insert id="insert" parameterType="com.mml.dingding.model.DingUserBean">
+    insert into ding_user (userid, name, tel, 
+      workpalce, remark, mobile, 
+      email, orgEmail, active, 
+      orderInDepts, isAdmin, isBoss, 
+      dingId, unionid, isLeaderInDepts, 
+      isHide, department, position, 
+      avatar, jobnumber, extatt, 
+      roles, roles_id, roles_name, 
+      roles_groupName, isSenior)
+    values (#{userid}, #{name}, #{tel}, 
+      #{workpalce}, #{remark}, #{mobile}, 
+      #{email}, #{orgemail}, #{active,jdbcType=BIT}, 
+      #{orderindepts}, #{isadmin,jdbcType=BIT}, #{isboss,jdbcType=BIT}, 
+      #{dingid}, #{unionid}, #{isleaderindepts,jdbcType=BIT}, 
+      #{ishide,jdbcType=BIT}, #{department}, #{position}, 
+      #{avatar}, #{jobnumber}, #{extatt}, 
+      #{roles}, #{rolesId}, #{rolesName}, 
+      #{rolesGroupname}, #{issenior,jdbcType=BIT})
+  </insert>
+  <insert id="insertActive" parameterType="java.util.Map">
+    insert into ding_user (userid, name, tel, 
+      workpalce, remark, mobile, 
+      email, orgEmail, active, 
+      orderInDepts, isAdmin, isBoss, 
+      dingId, unionid, isLeaderInDepts, 
+      isHide, department, position, 
+      avatar, jobnumber, extatt, 
+      roles, roles_id, roles_name, 
+      roles_groupName, isSenior,extattr)
+    values (#{userid}, #{name}, #{tel}, 
+      #{workpalce}, #{remark}, #{mobile}, 
+      #{email}, #{orgemail}, #{active,jdbcType=BIT}, 
+      #{orderindepts}, #{isadmin,jdbcType=BIT}, #{isboss,jdbcType=BIT}, 
+      #{dingid}, #{unionid}, #{isleaderindepts,jdbcType=BIT}, 
+      #{ishide,jdbcType=BIT}, #{department}, #{position}, 
+      #{avatar}, #{jobnumber}, #{extatt}, 
+      #{roles}, #{rolesId}, #{rolesName}, 
+      #{rolesGroupname}, #{issenior,jdbcType=BIT},#{extattr})
+  </insert>
+  
+   <select id="checkRepeat" parameterType="java.lang.String" resultType="java.lang.Integer">
+  	select count(*) from ding_user where mobile = #{mobile}
+  </select>
+  
+  <insert id="insertActiveooo" parameterType="java.util.Map">
+    insert into ding_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="tel != null">
+        tel,
+      </if>
+      <if test="workpalce != null">
+        workpalce,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="orgemail != null">
+        orgEmail,
+      </if>
+      <if test="active != null">
+        active,
+      </if>
+      <if test="orderindepts != null">
+        orderInDepts,
+      </if>
+      <if test="isadmin != null">
+        isAdmin,
+      </if>
+      <if test="isboss != null">
+        isBoss,
+      </if>
+      <if test="dingid != null">
+        dingId,
+      </if>
+      <if test="unionid != null">
+        unionid,
+      </if>
+      <if test="isleaderindepts != null">
+        isLeaderInDepts,
+      </if>
+      <if test="ishide != null">
+        isHide,
+      </if>
+      <if test="department != null">
+        department,
+      </if>
+      <if test="position != null">
+        position,
+      </if>
+      <if test="avatar != null">
+        avatar,
+      </if>
+      <if test="jobnumber != null">
+        jobnumber,
+      </if>
+      <if test="extatt != null">
+        extatt,
+      </if>
+      <if test="roles != null">
+        roles,
+      </if>
+      <if test="rolesId != null">
+        roles_id,
+      </if>
+      <if test="rolesName != null">
+        roles_name,
+      </if>
+      <if test="rolesGroupname != null">
+        roles_groupName,
+      </if>
+      <if test="issenior != null">
+        isSenior,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="workpalce != null">
+        #{workpalce,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="orgemail != null">
+        #{orgemail,jdbcType=VARCHAR},
+      </if>
+      <if test="active != null">
+        #{active,jdbcType=BIT},
+      </if>
+      <if test="orderindepts != null">
+        #{orderindepts,jdbcType=VARCHAR},
+      </if>
+      <if test="isadmin != null">
+        #{isadmin,jdbcType=BIT},
+      </if>
+      <if test="isboss != null">
+        #{isboss,jdbcType=BIT},
+      </if>
+      <if test="dingid != null">
+        #{dingid,jdbcType=VARCHAR},
+      </if>
+      <if test="unionid != null">
+        #{unionid,jdbcType=VARCHAR},
+      </if>
+      <if test="isleaderindepts != null">
+        #{isleaderindepts,jdbcType=BIT},
+      </if>
+      <if test="ishide != null">
+        #{ishide,jdbcType=BIT},
+      </if>
+      <if test="department != null">
+        #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="avatar != null">
+        #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="jobnumber != null">
+        #{jobnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="extatt != null">
+        #{extatt,jdbcType=VARCHAR},
+      </if>
+      <if test="roles != null">
+        #{roles,jdbcType=VARCHAR},
+      </if>
+      <if test="rolesId != null">
+        #{rolesId,jdbcType=VARCHAR},
+      </if>
+      <if test="rolesName != null">
+        #{rolesName,jdbcType=VARCHAR},
+      </if>
+      <if test="rolesGroupname != null">
+        #{rolesGroupname,jdbcType=VARCHAR},
+      </if>
+      <if test="issenior != null">
+        #{issenior,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+    
+</mapper>
