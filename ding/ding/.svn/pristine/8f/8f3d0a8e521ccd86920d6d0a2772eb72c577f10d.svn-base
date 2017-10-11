@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zing.dingding.dao.DingDepartmentDao" >
+  <resultMap id="BaseResultMap" type="com.zing.dingding.model.DingDepartmentBean">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="last_update_time" jdbcType="DATE" property="lastUpdateTime" />
+  </resultMap>
+  
+  <select id="selectIdByName" parameterType="String" resultType="String">
+  	select department_id from ding_department where name = #{name}
+  </select>
+  
+  <!-- 根据部门id查询部门名称 -->
+  <select id="selectNameById" parameterType="String" resultType="String">
+  	select name from ding_department where department_id = #{departmentId}
+  </select>
+  
+  <!-- 根据名字查询单个详细信息 -->
+  <select id="selectDetailByName" parameterType="String" resultMap="BaseResultMap">
+  	select * from ding_department where name = #{name}
+  </select>
+  
+  <!--根据名字查询父部门id -->
+  <select id="selectMoreByName" parameterType="String" resultType="String">
+  	select parent_id from ding_department where name = #{name}
+  </select>
+  
+  <!--查询相同名称的部门信息 -->
+  <select id="selectByName" parameterType="String" resultMap="BaseResultMap">
+  	select * from ding_department where name = #{name}
+  </select>
+  
+  
+  <!--查询该名称的部门个数  -->
+  <select id="deptCount" parameterType="String" resultType="Integer">
+  	select count(*) from ding_department where name = #{name}
+  </select>
+  
+  <insert id="insertTest" parameterType="com.zing.dingding.model.DingDepartmentBean">
+    insert into ding_department (id, department_id, name, 
+      parent_id, last_update_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{departmentId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{parentId,jdbcType=VARCHAR}, now()
+      )
+      on duplicate key update name = #{name}, parent_id = #{parentId}, last_update_time = #{lastUpdateTime}
+  </insert>
+	
+	<insert id="insert" parameterType="com.zing.dingding.model.DingDepartmentBean" >
+    insert into ding_department
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="departmentId != null">
+        department_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="order != null">
+        order,
+      </if>
+      <if test="createDeptGroup != null">
+        create_dept_group,
+      </if>
+      <if test="autoAddUser != null">
+        auto_add_user,
+      </if>
+      <if test="deptHiding != null">
+        dept_hiding,
+      </if>
+      <if test="deptPermits != null">
+        dept_permits,
+      </if>
+      <if test="userPermits != null">
+        user_permits,
+      </if>
+      <if test="outerDept != null">
+        outer_dept,
+      </if>
+      <if test="outerPermitDepts != null">
+        outer_permit_depts,
+      </if>
+      <if test="outerPermitUsers != null">
+        outer_permit_users,
+      </if>
+      <if test="orgDeptOwner != null">
+        org_dept_owner,
+      </if>
+      <if test="managerUserIdList != null">
+        manager_user_id_list,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="order != null">
+        #{order,jdbcType=VARCHAR},
+      </if>
+      <if test="createDeptGroup != null">
+        #{createDeptGroup,jdbcType=BIT},
+      </if>
+      <if test="autoAddUser != null">
+        #{autoAddUser,jdbcType=BIT},
+      </if>
+      <if test="deptHiding != null">
+        #{deptHiding,jdbcType=BIT},
+      </if>
+      <if test="deptPermits != null">
+        #{deptPermits,jdbcType=VARCHAR},
+      </if>
+      <if test="userPermits != null">
+        #{userPermits,jdbcType=VARCHAR},
+      </if>
+      <if test="outerDept != null">
+        #{outerDept,jdbcType=BIT},
+      </if>
+      <if test="outerPermitDepts != null">
+        #{outerPermitDepts,jdbcType=VARCHAR},
+      </if>
+      <if test="outerPermitUsers != null">
+        #{outerPermitUsers,jdbcType=VARCHAR},
+      </if>
+      <if test="orgDeptOwner != null">
+        #{orgDeptOwner,jdbcType=VARCHAR},
+      </if>
+      <if test="managerUserIdList != null">
+        #{managerUserIdList,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

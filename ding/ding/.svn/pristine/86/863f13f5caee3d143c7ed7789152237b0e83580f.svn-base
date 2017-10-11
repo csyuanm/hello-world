@@ -1,0 +1,15 @@
+package com.zing.dingding.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.zing.dingding.model.NsGoodsDetailBean;
+
+@Mapper
+public interface NsGoodsDetailDao {
+
+	int insert(NsGoodsDetailBean goodsDetail);
+	
+	List<NsGoodsDetailBean> getGoodsDetailList(Integer internalId);
+}

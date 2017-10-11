@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zing.dingding.dao.DingApprovalReceiveDao" >
+  <resultMap id="BaseResultMap" type="com.zing.dingding.model.DingApprovalReceiveBean" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="approver_userid_list" property="approverUseridList" jdbcType="VARCHAR" />
+    <result column="form_component_values" property="formComponentValues" jdbcType="VARCHAR" />
+    <result column="originator_dept_id" property="originatorDeptId" jdbcType="VARCHAR" />
+    <result column="originator_userid" property="originatorUserid" jdbcType="VARCHAR" />
+    <result column="process_instance_id" property="processInstanceId" jdbcType="VARCHAR" />
+    <result column="process_instance_result" property="processInstanceResult" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="DATE" />
+    <result column="finish_time" property="finishTime" jdbcType="DATE" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="DATE" />
+  </resultMap>
+
+  <insert id="insert" parameterType="com.zing.dingding.model.DingApprovalReceiveBean" >
+    insert into ding_approve_receive (id, title, approver_userid_list, 
+      form_component_values, originator_dept_id, 
+      originator_userid, process_instance_id, process_instance_result, 
+      status, create_time, finish_time, last_update_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{approverUseridList,jdbcType=VARCHAR}, 
+      #{formComponentValues,jdbcType=VARCHAR}, #{originatorDeptId,jdbcType=VARCHAR}, 
+      #{originatorUserid,jdbcType=VARCHAR}, #{processInstanceId,jdbcType=VARCHAR}, #{processInstanceResult,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE}, #{finishTime,jdbcType=DATE}, now()
+      )
+      on duplicate key update process_instance_result = #{processInstanceResult},finish_time = #{finishTime},status = #{status}, last_update_time = now()
+
+  </insert>
+  
+</mapper>

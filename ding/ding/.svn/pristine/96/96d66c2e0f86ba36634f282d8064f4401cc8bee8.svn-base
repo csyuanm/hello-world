@@ -1,0 +1,4 @@
+function getEmpBirthday(){
+	var emp = nlapiLoadRecord('employee',id);
+	return emp;
+}

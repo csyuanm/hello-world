@@ -1,0 +1,69 @@
+package com.zing.dingding.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.zing.dingding.model.DingDepartmentBean;
+
+@Mapper
+public interface DingDepartmentDao {
+	
+   int updateFlag();
+   /**
+    * TEST
+    * @auth mark
+    * @Description: TODO 把钉钉部门保存在本地
+    * @param departmentBean
+    * @return    
+    * @date 2017年8月30日 下午3:08:57
+    */
+   int insert(DingDepartmentBean departmentBean);
+   
+   /**
+    * 根据部门名字 查询对应id
+    * @auth mark
+    * @Description: TODO 
+    * @param name
+    * @return    
+    * @date 2017年8月30日 下午3:09:58
+    */
+   String selectIdByName(String name);
+   
+   /**
+    * 根据部门名字 查询该部门详细内容(单个情况下)
+    * @auth mark
+    * @param name
+    * @return    部门详细信息
+    * @date 2017年9月4日 下午2:30:31
+    */
+   DingDepartmentBean selectDetailByName(String name);
+   
+   /**
+    * 根据部门名字 查询父部门id(多个)
+    * @auth mark
+    * @param name
+    * @return    
+    * @date 2017年9月4日 下午5:07:04
+    */
+   List<String> selectMoreByName(String name);
+   
+   
+   List<DingDepartmentBean> selectByName(String name);
+   /**
+    * 根据部门id查询部门名称
+    * @auth mark
+    * @param name
+    * @return    
+    * @date 2017年9月4日 下午6:15:59
+    */
+   String selectNameById(String name);
+   /**
+    * 查询该名称的部门数
+    * @auth mark
+    * @param name
+    * @return    
+    * @date 2017年9月4日 下午2:35:46
+    */
+   int deptCount(String name);
+}

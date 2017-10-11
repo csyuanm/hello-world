@@ -1,0 +1,44 @@
+package com.zing.dingding.service;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+
+public interface IUserService {
+
+	/**
+	 * 根据id获取个人详细信息
+	 * @auth mark
+	 * @Description: TODO 
+	 * @param token
+	 * @param id
+	 * @return    
+	 * @date 2017年8月31日 上午10:53:06
+	 */
+	String getUser(String token, String id);
+	
+	/**
+	 * 根据部门id保存钉钉成员到本地
+	 * @auth mark
+	 * @Description: TODO 
+	 * @param token
+	 * @param department_id
+	 * @return    
+	 * @date 2017年8月31日 上午10:54:01
+	 */
+	String getDetail(String token, String department_id);
+	
+	String addDingUser();
+
+	/**
+	 * 获取当前公司所有部门
+	 * @auth mark
+	 * @Description: TODO 
+	 * @return
+	 * @throws IOException
+	 * @throws URISyntaxException    
+	 * @date 2017年8月31日 上午10:52:20
+	 */
+	String get();
+	
+}

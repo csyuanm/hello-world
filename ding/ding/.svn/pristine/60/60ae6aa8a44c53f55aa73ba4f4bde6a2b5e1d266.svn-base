@@ -1,0 +1,302 @@
+package com.zing.dingding.model;
+
+import java.io.Serializable;
+
+
+
+public class DingUserBean implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
+    private String userid;
+
+    private String name;
+
+    private String tel;
+
+    private String workpalce;
+
+    private String remark;
+
+    private String mobile;
+
+    private String email;
+
+    private String orgemail;
+
+    private Boolean active;
+
+    private String orderindepts;
+
+    private Boolean isadmin;
+
+    private Boolean isboss;
+
+    private String dingid;
+
+    private String unionid;
+
+    private Boolean isleaderindepts;
+
+    private Boolean ishide;
+
+    private String department;
+
+    private String position;
+
+    private String avatar;
+
+    private String jobnumber;
+
+    private String extatt;
+
+    private String roles;
+
+    private String rolesId;
+
+    private String rolesName;
+
+    private String rolesGroupname;
+
+    private Boolean issenior;
+    
+    private String openId;
+    
+    private String extattr;
+    
+    private int order;
+
+	public String getUserid() {
+		return userid;
+	}
+
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+
+	public String getWorkpalce() {
+		return workpalce;
+	}
+
+	public void setWorkpalce(String workpalce) {
+		this.workpalce = workpalce;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getOrgemail() {
+		return orgemail;
+	}
+
+	public void setOrgemail(String orgemail) {
+		this.orgemail = orgemail;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
+	public String getOrderindepts() {
+		return orderindepts;
+	}
+
+	public void setOrderindepts(String orderindepts) {
+		this.orderindepts = orderindepts;
+	}
+
+	public Boolean getIsadmin() {
+		return isadmin;
+	}
+
+	public void setIsadmin(Boolean isadmin) {
+		this.isadmin = isadmin;
+	}
+
+	public Boolean getIsboss() {
+		return isboss;
+	}
+
+	public void setIsboss(Boolean isboss) {
+		this.isboss = isboss;
+	}
+
+	public String getDingid() {
+		return dingid;
+	}
+
+	public void setDingid(String dingid) {
+		this.dingid = dingid;
+	}
+
+	public String getUnionid() {
+		return unionid;
+	}
+
+	public void setUnionid(String unionid) {
+		this.unionid = unionid;
+	}
+
+	public Boolean getIsleaderindepts() {
+		return isleaderindepts;
+	}
+
+	public void setIsleaderindepts(Boolean isleaderindepts) {
+		this.isleaderindepts = isleaderindepts;
+	}
+
+	public Boolean getIshide() {
+		return ishide;
+	}
+
+	public void setIshide(Boolean ishide) {
+		this.ishide = ishide;
+	}
+
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	public String getJobnumber() {
+		return jobnumber;
+	}
+
+	public void setJobnumber(String jobnumber) {
+		this.jobnumber = jobnumber;
+	}
+
+	public String getExtatt() {
+		return extatt;
+	}
+
+	public void setExtatt(String extatt) {
+		this.extatt = extatt;
+	}
+
+	public String getRoles() {
+		return roles;
+	}
+
+	public void setRoles(String roles) {
+		this.roles = roles;
+	}
+
+	public String getRolesId() {
+		return rolesId;
+	}
+
+	public void setRolesId(String rolesId) {
+		this.rolesId = rolesId;
+	}
+
+	public String getRolesName() {
+		return rolesName;
+	}
+
+	public void setRolesName(String rolesName) {
+		this.rolesName = rolesName;
+	}
+
+	public String getRolesGroupname() {
+		return rolesGroupname;
+	}
+
+	public void setRolesGroupname(String rolesGroupname) {
+		this.rolesGroupname = rolesGroupname;
+	}
+
+	public Boolean getIssenior() {
+		return issenior;
+	}
+
+	public void setIssenior(Boolean issenior) {
+		this.issenior = issenior;
+	}
+
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+
+	public String getExtattr() {
+		return extattr;
+	}
+
+	public void setExtattr(String extattr) {
+		this.extattr = extattr;
+	}
+
+	public int getOrder() {
+		return order;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
+	}
+
+    
+}

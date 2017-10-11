@@ -1,0 +1,188 @@
+package com.zing.dingding.model;
+
+import java.io.Serializable;
+
+public class NsEmpBean implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+	
+    private Integer id;
+
+    private String nsId;
+
+    private String entityId;
+
+    private String title;
+
+    private String mobilephone;
+
+    private String supervisor;
+
+    private String email;
+
+    private String image;
+
+    private String phone;
+
+    private String subsidiary;
+
+    private String department;
+
+    private String location;
+
+    private String custentityIdentificationNumber;
+
+    private String comments;
+
+    private String workCalendar;
+
+    private String birthDate;
+
+    private String hireDate;
+
+    private String lastModifiedDate;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNsId() {
+		return nsId;
+	}
+
+	public void setNsId(String nsId) {
+		this.nsId = nsId;
+	}
+
+	public String getEntityId() {
+        return entityId;
+    }
+
+    public void setEntityId(String entityId) {
+        this.entityId = entityId == null ? null : entityId.trim();
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title == null ? null : title.trim();
+    }
+
+    public String getMobilephone() {
+        return mobilephone;
+    }
+
+    public void setMobilephone(String mobilephone) {
+        this.mobilephone = mobilephone == null ? null : mobilephone.trim();
+    }
+
+    public String getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(String supervisor) {
+        this.supervisor = supervisor == null ? null : supervisor.trim();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image == null ? null : image.trim();
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone == null ? null : phone.trim();
+    }
+
+    public String getSubsidiary() {
+        return subsidiary;
+    }
+
+    public void setSubsidiary(String subsidiary) {
+        this.subsidiary = subsidiary == null ? null : subsidiary.trim();
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department == null ? null : department.trim();
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location == null ? null : location.trim();
+    }
+
+    public String getCustentityIdentificationNumber() {
+        return custentityIdentificationNumber;
+    }
+
+    public void setCustentityIdentificationNumber(String custentityIdentificationNumber) {
+        this.custentityIdentificationNumber = custentityIdentificationNumber == null ? null : custentityIdentificationNumber.trim();
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments == null ? null : comments.trim();
+    }
+
+    public String getWorkCalendar() {
+        return workCalendar;
+    }
+
+    public void setWorkCalendar(String workCalendar) {
+        this.workCalendar = workCalendar == null ? null : workCalendar.trim();
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate == null ? null : birthDate.trim();
+    }
+
+    public String getHireDate() {
+        return hireDate;
+    }
+
+    public void setHireDate(String hireDate) {
+        this.hireDate = hireDate == null ? null : hireDate.trim();
+    }
+
+    public String getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(String lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate == null ? null : lastModifiedDate.trim();
+    }
+}

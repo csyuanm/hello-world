@@ -1,0 +1,61 @@
+package com.zing.dingding.service.impl;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.zing.dingding.common.DingDingAuth;
+import com.zing.dingding.dao.DingDepartmentDao;
+import com.zing.dingding.model.DingDepartmentBean;
+import com.zing.dingding.service.IDepartmentService;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+@Service
+public class IDepartmentServiceImpl implements IDepartmentService {
+	
+	@Autowired 
+	DingDepartmentDao departmentDao;
+	
+	
+	/**
+	 * 批量添加当前公司所有部门
+	 */
+	@Override
+	public String saveDepartment(String token) {
+		DingDepartmentBean department = new DingDepartmentBean();
+		String result = null;
+		String url = "https://oapi.dingtalk.com/department/list?access_token=" + token;
+		try {
+			result = DingDingAuth.getAuth(url, null);
+			// 将Json字符串转为java对象
+			JSONObject jsonObject = JSONObject.fromObject(result);
+			JSONArray jArray = jsonObject.getJSONArray("department");
+			// System.out.println("使用toString...结果是一样的说"+jArray.toString());
+			if (jArray != null && jArray.size() > 0) {
+				for (int i = 0; i < jArray.size(); i++) {
+					Object obj = jArray.get(i);// 获取当前部门的信息
+					JSONObject json = JSONObject.fromObject(obj);// 将获取的对象转化为json格式
+					if (json.has("parentid")&&(json.getString("parentid")!="")) {
+						department.setParentId(json.getString("parentid"));
+					}
+					department.setDepartmentId(json.getString("id"));
+					department.setCreateDeptGroup(json.getBoolean("createDeptGroup"));
+					department.setName(json.getString("name"));
+					department.setAutoAddUser(json.getBoolean("autoAddUser"));
+				//	departmentDao.insert(department);
+					departmentDao.insertTest(department);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+}

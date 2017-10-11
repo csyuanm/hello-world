@@ -1,0 +1,211 @@
+package com.zing.dingding.controller;
+
+import java.io.Closeable;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.zing.dingding.common.Constants;
+import com.zing.dingding.common.DingDingAuth;
+import com.zing.dingding.common.NetSuiteAuth;
+import com.zing.dingding.common.UserUtil;
+import com.zing.dingding.service.IUserService;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+@RestController
+@SuppressWarnings("all")
+@RequestMapping("/user")
+public class UserController {
+
+	@Autowired
+	IUserService userService;
+
+	/**
+	 * 保存所有成员
+	 * @auth mark
+	 * @return
+	 * @throws IOException
+	 * @throws URISyntaxException    
+	 * @date 2017年8月31日 下午3:22:52
+	 */
+	@Scheduled(cron = "0/20 * * * * *")
+	@RequestMapping("savaEmployee")
+	public String get() throws IOException, URISyntaxException {
+		return userService.get();
+	}
+	/**
+	 * 获取部门员工详细信息并保存
+	 * 
+	 * @param department_id
+	 * @return
+	 */
+	@RequestMapping("addUserList")
+	public String getUserList(String department_id) {
+
+		String access_token = Constants.getToken();
+		return userService.getDetail(access_token, department_id);
+	}
+	/**
+	 * 向钉钉添加成员
+	 * 应该传入部门id 、手机、名字 、	工号
+	 * @return
+	 * @throws Exception 
+	 * @throws IOException 
+	 */
+	@RequestMapping("addUser")
+	public String addUser() throws IOException, Exception {
+		String str = null;
+		String access_token = Constants.getToken();
+		String url = "https://oapi.dingtalk.com/user/create?access_token=" + access_token;
+		str = NetSuiteAuth.getAuth(NetSuiteAuth.getAccount(), UserUtil.EMPLOYEEINFOS, null);
+		JSONArray resultArray = JSONArray.fromObject(str);
+		if (resultArray.size() > 0) {
+			for (int i = 0; i < resultArray.size(); i++) {
+				JSONObject employeeArray = JSONObject.fromObject(resultArray.get(i));
+				String employee = employeeArray.getString("columns");
+				userService.addDingUser(employee, access_token);
+			}
+		}
+		System.out.println(str);
+		return str;
+	}
+	
+	
+	
+	
+	
+						//   ------以下是测试-------
+						//   ------以下是测试-------
+						//   ------以下是测试-------
+						//   ------以下是测试-------
+						//   ------以下是测试-------
+	
+
+	/**
+	 * 修改某个员工信息
+	 * @return
+	 * @throws Exception 
+	 * @throws IOException 
+	 */
+	@RequestMapping("/update")
+	public String update() throws IOException, Exception {
+		String access_token = Constants.getToken();
+		String smsUrl = "https://oapi.dingtalk.com/user/update?access_token="+access_token;
+		String str = null;
+		JSONObject jobj = new JSONObject();
+		jobj.put("userid", "05245112311216800");
+		jobj.put("name", "小lan");
+		str = DingDingAuth.dingPost(jobj, smsUrl);
+		System.out.println(str);
+		return str;
+	}
+	
+	
+	/**
+	 * test POST
+	 * 
+	 * @return
+	 * @throws Exception 
+	 * @throws IOException 
+	 */
+	@RequestMapping("testPost")
+	public String addDingUser() throws IOException, Exception {
+		String str = "";
+		String token = Constants.getToken();
+		String url = "https://oapi.dingtalk.com/message/send?access_token=" + token;
+			String userid = "131663260446792755";
+			// String url =
+			// "https://eco.taobao.com/router/rest?method=dingtalk.corp.message.corpconversation.asyncsend&v=2.0&format=json&session="+token;
+			JSONObject obj = new JSONObject();
+			JSONObject content = new JSONObject();
+			content.put("content", "生日祝福语1");
+			obj.put("agentid", 115257477);
+			obj.put("touser", userid);//单个传入字符串就可以，多个我也不懂怎么传
+			obj.put("msgtype", "text");
+			obj.put("text", content);
+			str = DingDingAuth.dingPost(obj, url);
+			return str;
+	}
+	/**
+	 * Test
+	 * @auth mark
+	 * @Description:      
+	 * @date 2017年8月31日 上午11:01:42
+	 */
+	@RequestMapping("test")
+	public void test() {
+		// 取得HttpClient
+		HttpClient httpClient = new DefaultHttpClient();
+		// HttpPost连接对象
+		HttpPost httpPost = new HttpPost(
+				"https://oapi.dingtalk.com/user/update?access_token=");
+		// 使用NameValuePair来保存要传递的Post参数
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		// 添加要传递的参数
+		// params.add(new BasicNameValuePair("access_token",
+		// "87313a0b40923e459209ddc930acf648"));
+		params.add(new BasicNameValuePair("userid", "05245112311216800"));
+		params.add(new BasicNameValuePair("name", "tmd"));
+		try {
+			// 设置字符集
+			HttpEntity httpentity = new UrlEncodedFormEntity(params, HTTP.UTF_8);
+			// 请求httpPost
+			httpPost.setEntity(httpentity);
+			// 取得HttpResponse
+			System.out.println(httpPost.getURI());
+			HttpResponse httpResponse = httpClient.execute(httpPost);
+			if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				String strResult = EntityUtils.toString(httpResponse.getEntity());
+				System.out.println(strResult);
+			} else {
+				System.out.println("请求错误");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (httpPost != null) {
+					httpPost.releaseConnection(); // 关闭method 的 httpclient连接
+				}
+				if (httpClient != null) {
+					((Closeable) httpClient).close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+}

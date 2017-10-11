@@ -1,0 +1,158 @@
+package com.zing.dingding.model;
+
+import java.io.Serializable;
+
+public class DingDepartmentBean implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+	
+    private Integer id;
+
+    private String departmentId;
+
+    private String name;
+
+    private String parentId;
+
+    private String order;
+
+    private Boolean createDeptGroup;
+
+    private Boolean autoAddUser;
+
+    private Boolean deptHiding;
+
+    private String deptPermits;
+
+    private String userPermits;
+
+    private Boolean outerDept;
+
+    private String outerPermitDepts;
+
+    private String outerPermitUsers;
+
+    private String orgDeptOwner;
+
+    private String managerUserIdList;
+
+    public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId == null ? null : departmentId.trim();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId == null ? null : parentId.trim();
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order == null ? null : order.trim();
+    }
+
+    public Boolean getCreateDeptGroup() {
+        return createDeptGroup;
+    }
+
+    public void setCreateDeptGroup(Boolean createDeptGroup) {
+        this.createDeptGroup = createDeptGroup;
+    }
+
+    public Boolean getAutoAddUser() {
+        return autoAddUser;
+    }
+
+    public void setAutoAddUser(Boolean autoAddUser) {
+        this.autoAddUser = autoAddUser;
+    }
+
+    public Boolean getDeptHiding() {
+        return deptHiding;
+    }
+
+    public void setDeptHiding(Boolean deptHiding) {
+        this.deptHiding = deptHiding;
+    }
+
+    public String getDeptPermits() {
+        return deptPermits;
+    }
+
+    public void setDeptPermits(String deptPermits) {
+        this.deptPermits = deptPermits == null ? null : deptPermits.trim();
+    }
+
+    public String getUserPermits() {
+        return userPermits;
+    }
+
+    public void setUserPermits(String userPermits) {
+        this.userPermits = userPermits == null ? null : userPermits.trim();
+    }
+
+    public Boolean getOuterDept() {
+        return outerDept;
+    }
+
+    public void setOuterDept(Boolean outerDept) {
+        this.outerDept = outerDept;
+    }
+
+    public String getOuterPermitDepts() {
+        return outerPermitDepts;
+    }
+
+    public void setOuterPermitDepts(String outerPermitDepts) {
+        this.outerPermitDepts = outerPermitDepts == null ? null : outerPermitDepts.trim();
+    }
+
+    public String getOuterPermitUsers() {
+        return outerPermitUsers;
+    }
+
+    public void setOuterPermitUsers(String outerPermitUsers) {
+        this.outerPermitUsers = outerPermitUsers == null ? null : outerPermitUsers.trim();
+    }
+
+    public String getOrgDeptOwner() {
+        return orgDeptOwner;
+    }
+
+    public void setOrgDeptOwner(String orgDeptOwner) {
+        this.orgDeptOwner = orgDeptOwner == null ? null : orgDeptOwner.trim();
+    }
+
+    public String getManagerUserIdList() {
+        return managerUserIdList;
+    }
+
+    public void setManagerUserIdList(String managerUserIdList) {
+        this.managerUserIdList = managerUserIdList == null ? null : managerUserIdList.trim();
+    }
+}

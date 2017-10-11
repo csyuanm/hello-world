@@ -1,0 +1,145 @@
+package com.zing.dingding.model;
+
+import java.io.Serializable;
+import java.util.Date;
+
+public class NsApprovalBean implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+
+	private Integer id;
+
+    private String internalId;
+
+    private String tranId;
+
+    private String applicant;
+
+    private String department;
+
+    private String approver;
+
+    private String goods;
+
+    private Double total;
+
+    private Double taxtotal;
+
+    private Double subtotal;
+
+    private String location;
+
+    private String supplier;
+
+    private Date lastUpdateTime;
+    
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getInternalId() {
+        return internalId;
+    }
+
+    public void setInternalId(String internalId) {
+        this.internalId = internalId == null ? null : internalId.trim();
+    }
+
+    public String getTranId() {
+        return tranId;
+    }
+
+    public void setTranId(String tranId) {
+        this.tranId = tranId == null ? null : tranId.trim();
+    }
+
+    public String getApplicant() {
+        return applicant;
+    }
+
+    public void setApplicant(String applicant) {
+        this.applicant = applicant == null ? null : applicant.trim();
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department == null ? null : department.trim();
+    }
+
+    public String getApprover() {
+        return approver;
+    }
+
+    public void setApprover(String approver) {
+        this.approver = approver == null ? null : approver.trim();
+    }
+
+    public String getGoods() {
+        return goods;
+    }
+
+    public void setGoods(String goods) {
+        this.goods = goods == null ? null : goods.trim();
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double d) {
+        this.total = d;
+    }
+
+    public Double getTaxtotal() {
+		return taxtotal;
+	}
+
+	public void setTaxtotal(Double taxtotal) {
+		this.taxtotal = taxtotal;
+	}
+
+	public Double getSubtotal() {
+		return subtotal;
+	}
+
+	public void setSubtotal(Double subtotal) {
+		this.subtotal = subtotal;
+	}
+
+	public void setTotal(Double total) {
+		this.total = total;
+	}
+
+	public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location == null ? null : location.trim();
+    }
+
+
+	public String getSupplier() {
+		return supplier;
+	}
+
+	public void setSupplier(String supplier) {
+		this.supplier = supplier;
+	}
+
+	public Date getLastUpdateTime() {
+		return lastUpdateTime;
+	}
+
+	public void setLastUpdateTime(Date lastUpdateTime) {
+		this.lastUpdateTime = lastUpdateTime;
+	}
+    
+}

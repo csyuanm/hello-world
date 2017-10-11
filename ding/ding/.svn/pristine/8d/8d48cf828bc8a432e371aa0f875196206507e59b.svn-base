@@ -1,0 +1,16 @@
+package com.zing.dingding.dao;
+
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.zing.dingding.model.DingApproveReceiveBean;
+
+@SuppressWarnings("all")
+@Mapper
+public interface DingApproveReceiveDao {
+	
+	int insertMap(Map map);
+	int insert(DingApproveReceiveBean processBean);
+	
+}

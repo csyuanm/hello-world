@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zing.dingding.dao.NsExpenseDetailDao" >
+  <resultMap id="BaseResultMap" type="com.zing.dingding.model.NsExpenseDetailBean" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="expense_internalid" property="expenseInternalid" jdbcType="INTEGER" />
+    <result column="internal_id" property="internalId" jdbcType="INTEGER" />
+    <result column="category" property="category" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DOUBLE" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="BIT" />
+    <result column="last_udpate_time" property="lastUdpateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <insert id="insert" parameterType="com.zing.dingding.model.NsExpenseDetailBean" >
+    insert into ns_expense_detail (id, expense_internalid, internal_id, 
+      category, amount, remark, 
+      location, flag, last_udpate_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{expenseInternalid,jdbcType=INTEGER}, #{internalId,jdbcType=INTEGER}, 
+      #{category,jdbcType=VARCHAR}, #{amount,jdbcType=DOUBLE}, #{remark,jdbcType=VARCHAR}, 
+      #{location,jdbcType=VARCHAR}, 1, now()}
+      )
+  </insert>
+</mapper>

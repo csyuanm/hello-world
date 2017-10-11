@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zing.dingding.dao.NsApprovalDao" >
+  <resultMap id="BaseResultMap" type="com.zing.dingding.model.NsApprovalBean" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="internal_id" property="internalId" jdbcType="VARCHAR" />
+    <result column="tran_id" property="tranId" jdbcType="VARCHAR" />
+    <result column="return_id" property="returnId" jdbcType="VARCHAR" />
+    <result column="applicant" property="applicant" jdbcType="VARCHAR" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="approver" property="approver" jdbcType="VARCHAR" />
+    <result column="goods" property="goods" jdbcType="VARCHAR" />
+    <result column="total" property="total" jdbcType="REAL" />
+    <result column="taxtotal" property="taxtotal" jdbcType="REAL" />
+    <result column="subtotal" property="subtotal" jdbcType="REAL" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="supplier" property="supplier" jdbcType="VARCHAR" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <update id="updateReturnId" parameterType="String">
+  	update ns_approval set return_id = #{returnId} where internal_id = #{internalId}
+  </update>
+  
+  <select id="selectInstanceId" parameterType="String" resultType="String">
+  	select return_id from ns_approval where internal_id = #{nsId}
+  </select>
+  
+  <!-- 根据审批id查询订单id -->
+  <select id="selectOrderId" parameterType="String" resultType="String">
+  	select internal_id from ns_approval where return_id = #{returnId}
+  </select>
+  
+  <insert id="insert" parameterType="com.zing.dingding.model.NsApprovalBean" >
+    insert into ns_approval (id, internal_id, tran_id, 
+      applicant, department, approver, 
+      goods, total, taxtotal, subtotal, 
+      location, supplier, last_update_time)
+    values (#{id,jdbcType=INTEGER}, #{internalId,jdbcType=VARCHAR}, #{tranId,jdbcType=VARCHAR}, 
+      #{applicant,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{approver,jdbcType=VARCHAR}, 
+      #{goods,jdbcType=VARCHAR}, #{total,jdbcType=REAL}, #{taxtotal,jdbcType=REAL}, #{subtotal,jdbcType=REAL}, 
+      #{location,jdbcType=VARCHAR}, #{supplier,jdbcType=VARCHAR}, now())
+      on duplicate key update internal_id = #{internalId},last_update_time = now()
+  </insert>
+  
+</mapper>

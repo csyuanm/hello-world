@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mml.dingding.dao.NetsuitePurchaseApproveDao">
+  <resultMap id="BaseResultMap" type="com.mml.dingding.model.NsApprovePurchaseOrderBean" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="ns_id" property="nsId" jdbcType="VARCHAR" />
+    <result column="entity_id" property="entityId" jdbcType="VARCHAR" />
+    <result column="return_id" property="returnId" jdbcType="VARCHAR" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="cust_body_approver" property="custBodyApprover" jdbcType="VARCHAR" />
+    <result column="tran_id" property="tranId" jdbcType="VARCHAR" />
+    <result column="display_name" property="displayName" jdbcType="VARCHAR" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="REAL" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="rate" property="rate" jdbcType="REAL" />
+    <result column="tax_code" property="taxCode" jdbcType="VARCHAR" />
+    <result column="status_ref" property="statusRef" jdbcType="VARCHAR" />
+    <result column="due_date" property="dueDate" jdbcType="VARCHAR" />
+    <result column="tran_date" property="tranDate" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.mml.dingding.model.NsApprovePurchaseOrderBean">
+    insert into ns_approve_purchase_order (ns_id, entity_id, return_id, 
+      created_by, cust_body_approver, tran_id, 
+      display_name, quantity, amount, 
+      location, rate, tax_code, 
+      status_ref, due_date, tran_date
+      )
+    values (#{nsId,jdbcType=VARCHAR}, #{entityId,jdbcType=VARCHAR}, #{returnId,jdbcType=VARCHAR}, 
+      #{createdBy,jdbcType=VARCHAR}, #{custBodyApprover,jdbcType=VARCHAR}, #{tranId,jdbcType=VARCHAR}, 
+      #{displayName,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{amount,jdbcType=REAL}, 
+      #{location,jdbcType=VARCHAR}, #{rate,jdbcType=REAL}, #{taxCode,jdbcType=VARCHAR}, 
+      #{statusRef,jdbcType=VARCHAR}, #{dueDate,jdbcType=VARCHAR}, #{tranDate,jdbcType=VARCHAR}
+      )
+      on duplicate key update cust_body_approver =#{custBodyApprover}, quantity = #{quantity}, rate = #{rate}
+  </insert>
+  
+  <!-- 根据订单id查询审批id -->
+  <select id="selectInstanceId" parameterType="String" resultType="String">
+  	select return_id from ns_approve_purchase_order where ns_id = #{nsId}
+  </select>
+  
+  <!-- 根据审批id查询订单id -->
+  <select id="selectOrderId" parameterType="String" resultType="String">
+  	select ns_id from ns_approve_purchase_order where return_id = #{returnId}
+  </select>
+  
+  <update id="updateInstanceId" parameterType="String">
+  	update ns_approve_purchase_order set return_id = #{returnId} where ns_id = #{nsId}
+  </update>
+  
+  
+					  <!-- 以下没用到！！！ -->
+					  <!-- 以下没用到！！！ -->
+					  <!-- 以下没用到！！！ -->
+					  <!-- 以下没用到！！！ -->
+					  
+					  
+  
+  <update id="update" parameterType="com.mml.dingding.model.NsApprovePurchaseOrderBean">
+  update ns_approve_purchase_order 
+  <set>
+  <if test="custBodyApprover != null">
+        cust_body_approver = #{custBodyApprover,jdbcType=VARCHAR},
+      </if>
+      <if test="taxCode != null">
+        tax_code = #{taxCode,jdbcType=VARCHAR},
+      </if>
+      <if test="statusRef != null">
+        status_ref = #{statusRef,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null">
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+  </set>
+  where ns_id = #{nsId}
+  </update>
+  
+</mapper>

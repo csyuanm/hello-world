@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zing.dingding.dao.NsExpenseDetailDao">
+  <resultMap id="BaseResultMap" type="com.zing.dingding.model.NsExpenseDetailBean">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="expense_internalid" jdbcType="INTEGER" property="expenseInternalid" />
+    <result column="category" jdbcType="VARCHAR" property="category" />
+    <result column="amount" jdbcType="DOUBLE" property="amount" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
+    <result column="flag" jdbcType="BIT" property="flag" />
+    <result column="start_time" jdbcType="VARCHAR" property="startTime" />
+    <result column="end_time" jdbcType="VARCHAR" property="endTime" />
+    <result column="last_udpate_time" jdbcType="TIMESTAMP" property="lastUdpateTime" />
+  </resultMap>
+  <insert id="insert" parameterType="com.zing.dingding.model.NsExpenseDetailBean">
+    insert into ns_expense_detail (id, expense_internalid,  
+      category, amount, remark, 
+      img_url, flag, start_time, 
+      end_time, last_udpate_time)
+    values (#{id,jdbcType=INTEGER}, #{expenseInternalid,jdbcType=INTEGER}, 
+      #{category,jdbcType=VARCHAR}, #{amount,jdbcType=DOUBLE}, #{remark,jdbcType=VARCHAR}, 
+      #{imgUrl,jdbcType=VARCHAR}, 1, #{startTime,jdbcType=VARCHAR}, 
+      #{endTime,jdbcType=VARCHAR}, now())
+  </insert>
+  
+  <select id="getExpenseDetailList" parameterType="Integer" resultMap="BaseResultMap">
+    select * from ns_expense_detail where expense_internalid = #{internalId}
+  </select>
+</mapper>

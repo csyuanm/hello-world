@@ -1,0 +1,11 @@
+package com.zing.dingding.service;
+
+import java.text.ParseException;
+
+public interface IProcessInstanceService {
+	
+	String createProcess();
+	
+	String saveProcessInstance() throws ParseException;
+
+}

@@ -1,0 +1,203 @@
+package com.zing.dingding.service.impl;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.zing.dingding.common.Constants;
+import com.zing.dingding.common.DingDingAuth;
+import com.zing.dingding.dao.DingUserDao;
+import com.zing.dingding.model.DingEmpBean;
+import com.zing.dingding.service.INetSuiteService;
+import com.zing.dingding.service.IUserService;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+@Service
+public class IUserServiceImpl implements IUserService {
+
+	@Autowired
+	DingUserDao userDao;
+
+	@Autowired
+	INetSuiteService nsService;
+
+	@Autowired
+	IUserService userSerice;
+	
+	
+	/**
+	 * 根据个人id获取员工详细信息
+	 */
+	@Override
+	public String getUser(String token, String userid) {
+		String result = "";
+		String url = "https://oapi.dingtalk.com/user/get?access_token="+token+"&userid="+userid;
+		try {
+			result = DingDingAuth.getAuth(url, null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	/**
+	 * 获取公司全部部门列表
+	 */
+	@Override
+	public String get() {
+		String str = "";
+		String token = Constants.getAccessToken();
+		String url = "https://oapi.dingtalk.com/department/list?access_token=" + token;
+		try {
+			str = DingDingAuth.getAuth(url, null);
+			JSONObject strObject = JSONObject.fromObject(str);
+			JSONArray deptArray = JSONArray.fromObject(strObject.get("department"));
+			if(deptArray != null && deptArray.size()>0){
+				for(int i = 0; i < deptArray.size(); i++){
+					JSONObject dept = JSONObject.fromObject(deptArray.get(i));
+					String deptId = dept.getString("id");
+					System.out.println(deptId);
+					str = getDetail(token, deptId);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+
+		return str;
+	}
+
+	/**
+	 * 根据部门id保存某个部门的成员数据
+	 */
+	@Override
+	public String getDetail(String token, String department_id) {
+		DingEmpBean user = new DingEmpBean();
+		String str = null;
+		String url = "https://oapi.dingtalk.com/user/list?access_token="+token+"&department_id="+department_id;
+		try {
+			str = DingDingAuth.getAuth(url, null);
+			JSONObject jsonObject = JSONObject.fromObject(str);
+			JSONArray jArray = JSONArray.fromObject(jsonObject.get("userlist"));
+		//	JSONArray jArray = jsonObject.getJSONArray("userlist");
+			if (jArray != null && jArray.size() > 0) {
+				for (int i = 0; i < jArray.size(); i++) {
+					Object obj = jArray.get(i);
+					JSONObject json = JSONObject.fromObject(obj);// 将获取的对象转化为json格式
+					user.setDepartment(json.getString("department"));
+					if (json.has("extattr")) {
+						user.setExtattr(json.getString("extattr"));
+					}
+					if(json.has("position")){
+						user.setPosition(json.getString("position"));
+					}
+					user.setDingId(json.getString("dingId"));
+					user.setUserId(json.getString("userid"));
+					user.setIsAdmin(json.getBoolean("isAdmin"));
+					user.setIsBoss(json.getBoolean("isBoss"));
+					user.setMobile(json.getString("mobile"));
+					user.setName(json.getString("name"));
+//					Map map = json;
+//					System.out.println(map);
+//					map.put("department", "");
+//					map.put("extattr", "");
+//					map.put("unionId", json.getString("unionid"));
+//					map.put("userId", json.getString("userid"));
+//					map.put("jobNumber", json.getString("jobnumber"));
+			//		userDao.forMap(map);
+					userDao.insert(user);
+					// int count =
+					// userDao.checkRepeat(json.getString("mobile"));
+					// if(count == 0){
+					// }
+				//	userDao.updateDepapartment(user);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+			
+		
+		return str;
+	}
+
+	/**
+	 * 向钉钉中添加成员
+	 */
+	@Override
+	public String addDingUser() {
+
+		nsService.getEmployeeList();
+		
+		String result = "";
+		String departmentId = "1";
+		String name = "inputName";
+		String mobile = "13310349876";
+		String url = "https://oapi.dingtalk.com/user/create";
+		JSONObject jobj = new JSONObject();
+		jobj.put("department", departmentId);
+		jobj.put("name", name);
+		jobj.put("mobile", mobile);
+		try {
+			result = (DingDingAuth.postAuth(url, jobj.toString())).replaceAll("(\r\n|\r|\n|\n\r)", "");
+			System.out.println("钉钉...result:" + result);
+		} catch (Exception e) {
+			System.out.println("添加成员到钉钉发生异常");
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	/**
+	 * 已失效
+	 * 
+	 * 获取个人详细信息并保存
+	 */
+	//@Override
+	public String getUser2(String token, String userid) {
+		DingEmpBean user = new DingEmpBean();
+		String str = null;
+			String url = "https://oapi.dingtalk.com/user/get?access_token="+token+"&userid="+userid;
+			try {
+				str = DingDingAuth.getAuth(url, null);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+			JSONObject json = JSONObject.fromObject(str);
+			// 读取json某个key的值，并赋值给实体类
+			if (json.has("department")) {
+				user.setDepartment(json.getString("department"));
+			}
+			if (json.has("roles")) {
+				user.setRoles(json.getString("roles"));
+			}
+			if (json.has("userid")) {
+				user.setUserId(json.getString("userid"));
+			}
+			// json转化为map 可以直接实现对实体类的对应，[]等特殊字符除外
+			Map map = json;
+			map.put("department", "");
+			map.put("roles", "");
+			// []不知道怎么转化，先加入控制，在进行修改。。
+			int count = userDao.checkRepeat(json.getString("mobile"));
+			if (count == 0) {
+				userDao.forMap(map);
+			}
+			userDao.updateDepapartment(user);
+		return str;
+	}
+	
+}

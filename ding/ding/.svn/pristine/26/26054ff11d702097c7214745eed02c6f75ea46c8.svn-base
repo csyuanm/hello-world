@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zing.dingding.dao.NsApprovalListDao" >
+  <resultMap id="BaseResultMap" type="com.zing.dingding.model.NsApprovalListBean" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="internal_id" property="internalId" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="number" property="number" jdbcType="VARCHAR" />
+    <result column="applicant" property="applicant" jdbcType="VARCHAR" />
+    <result column="applicant_id" property="applicantId" jdbcType="INTEGER" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="approver" property="approver" jdbcType="VARCHAR" />
+    <result column="process_id" property="processId" jdbcType="VARCHAR" />
+    <result column="result" property="result" jdbcType="VARCHAR" />
+    <result column="supplier" property="supplier" jdbcType="VARCHAR" />
+    <result column="supplier_number" property="supplierNumber" jdbcType="VARCHAR" />
+    <result column="total" property="total" jdbcType="DOUBLE" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="BIT" />
+    <result column="purchase_time" property="purchaseTime" jdbcType="VARCHAR" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <insert id="insert" parameterType="com.zing.dingding.model.NsApprovalListBean" >
+    insert ignore into ns_approval_list (id, internal_id, type, 
+      number, applicant, applicant_id, 
+      department, mobile, approver, 
+      process_id, result, supplier, supplierNumber, total, remark, 
+      flag, purchase_time, last_update_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{internalId,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, 
+      #{number,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{applicantId,jdbcType=INTEGER}, 
+      #{department,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{approver,jdbcType=VARCHAR}, 
+      #{processId,jdbcType=VARCHAR}, #{result,jdbcType=VARCHAR}, #{supplier,jdbcType=VARCHAR}, 
+      #{supplierNumber,jdbcType=VARCHAR}, #{total,jdbcType=DOUBLE}, #{remark,jdbcType=VARCHAR}, 
+      1, #{purchaseTime,jdbcType=VARCHAR}, now()
+      )
+  </insert>
+</mapper>

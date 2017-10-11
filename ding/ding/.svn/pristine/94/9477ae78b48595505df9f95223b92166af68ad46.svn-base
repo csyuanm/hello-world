@@ -1,0 +1,18 @@
+package com.zing.dingding.dao;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import com.zing.dingding.model.NsApprovalBean;
+
+@Mapper
+public interface NsApprovalDao {
+	
+	int insert(NsApprovalBean bean);
+	
+	int updateReturnId(@Param("returnId")String returnId, @Param("internalId")String internalId);
+	
+	String selectInstanceId(String nsId);
+	
+	String selectOrderId(String instancceId);
+}

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zing.dingding.dao.NsApproverListDao">
+  <resultMap id="BaseResultMap" type="com.zing.dingding.model.NsApproverListBean">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="ns_internalid" jdbcType="INTEGER" property="nsInternalid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="first_id" jdbcType="INTEGER" property="firstId" />
+    <result column="first_approver" jdbcType="VARCHAR" property="firstApprover" />
+    <result column="second_id" jdbcType="INTEGER" property="secondId" />
+    <result column="second_approver" jdbcType="VARCHAR" property="secondApprover" />
+    <result column="third_id" jdbcType="INTEGER" property="thirdId" />
+    <result column="third_approver" jdbcType="VARCHAR" property="thirdApprover" />
+    <result column="fourth_id" jdbcType="INTEGER" property="fourthId" />
+    <result column="fourth_approver" jdbcType="VARCHAR" property="fourthApprover" />
+    <result column="fifth_id" jdbcType="INTEGER" property="fifthId" />
+    <result column="fifth_approver" jdbcType="VARCHAR" property="fifthApprover" />
+    <result column="six_id" jdbcType="INTEGER" property="sixId" />
+    <result column="six_approver" jdbcType="VARCHAR" property="sixApprover" />
+    <result column="flag" jdbcType="BIT" property="flag" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+  <insert id="insert" parameterType="com.zing.dingding.model.NsApproverListBean">
+    insert into ns_approver_list (id, ns_internalid, name, 
+      first_id, first_approver, second_id, 
+      second_approver, third_id, third_approver, 
+      fourth_id, fourth_approver, fifth_id, 
+      fifth_approver, six_id, six_approver, 
+      flag, last_update_time)
+    values (#{id,jdbcType=INTEGER}, #{nsInternalid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{firstId,jdbcType=INTEGER}, #{firstApprover,jdbcType=VARCHAR}, #{secondId,jdbcType=INTEGER}, 
+      #{secondApprover,jdbcType=VARCHAR}, #{thirdId,jdbcType=INTEGER}, #{thirdApprover,jdbcType=VARCHAR}, 
+      #{fourthId,jdbcType=INTEGER}, #{fourthApprover,jdbcType=VARCHAR}, #{fifthId,jdbcType=INTEGER}, 
+      #{fifthApprover,jdbcType=VARCHAR}, #{sixId,jdbcType=INTEGER}, #{sixApprover,jdbcType=VARCHAR}, 
+      1, now())
+      on duplicate key update name = #{name}, first_id = #{firstId}, first_approver = #{firstApprover},
+      second_id = #{secondId}, second_approver = #{secondApprover}, third_id = #{thirdId},
+      third_approver = #{thirdApprover}, fourth_id = #{fourthId}, fourth_approver = #{fourthApprover}, 
+      fifth_id = #{fifthId}, fifth_approver = #{fifthApprover}, six_id = #{sixId},
+      six_approver = #{sixApprover}, last_update_time = now()
+  </insert>
+  
+  <select id="selectByInternalid" parameterType="Integer" resultMap="BaseResultMap">
+  	select * from ns_approver_list where ns_internalid = #{nsInternalid}
+  </select>
+  
+  <select id="selectByName" parameterType="String" resultMap="BaseResultMap">
+  	select * from ns_approver_list where name = #{name}
+  </select>
+  
+  <select id="selectListByName" parameterType="String" resultMap="BaseResultMap">
+  	select * from ns_approver_list where name like #{name}
+  </select>
+</mapper>

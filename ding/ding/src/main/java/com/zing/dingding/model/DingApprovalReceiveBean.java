@@ -1,0 +1,118 @@
+package com.zing.dingding.model;
+
+import java.io.Serializable;
+
+public class DingApprovalReceiveBean implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+
+	private Integer id;
+
+    private String title;
+
+    private String approverUseridList;
+
+    private String formComponentValues;
+
+    private String originatorDeptId;
+
+    private String originatorUserid;
+
+    private String processInstanceId;
+
+    private String processInstanceResult;
+
+    private String status;
+
+    private String createTime;
+
+    private String finishTime;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title == null ? null : title.trim();
+    }
+
+    public String getApproverUseridList() {
+        return approverUseridList;
+    }
+
+    public void setApproverUseridList(String approverUseridList) {
+        this.approverUseridList = approverUseridList == null ? null : approverUseridList.trim();
+    }
+
+    public String getFormComponentValues() {
+        return formComponentValues;
+    }
+
+    public void setFormComponentValues(String formComponentValues) {
+        this.formComponentValues = formComponentValues == null ? null : formComponentValues.trim();
+    }
+
+    public String getOriginatorDeptId() {
+        return originatorDeptId;
+    }
+
+    public void setOriginatorDeptId(String originatorDeptId) {
+        this.originatorDeptId = originatorDeptId == null ? null : originatorDeptId.trim();
+    }
+
+    public String getOriginatorUserid() {
+        return originatorUserid;
+    }
+
+    public void setOriginatorUserid(String originatorUserid) {
+        this.originatorUserid = originatorUserid == null ? null : originatorUserid.trim();
+    }
+
+    public String getProcessInstanceId() {
+        return processInstanceId;
+    }
+
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId == null ? null : processInstanceId.trim();
+    }
+
+    public String getProcessInstanceResult() {
+        return processInstanceResult;
+    }
+
+    public void setProcessInstanceResult(String processInstanceResult) {
+        this.processInstanceResult = processInstanceResult == null ? null : processInstanceResult.trim();
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(String finishTime) {
+        this.finishTime = finishTime;
+    }
+}

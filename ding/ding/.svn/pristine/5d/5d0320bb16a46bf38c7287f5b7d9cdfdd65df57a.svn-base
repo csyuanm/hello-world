@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zing.dingding.dao.NsEmployeeDao" >
+  <resultMap id="BaseResultMap" type="com.zing.dingding.model.NsEmployeeBean" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="emp_internalid" property="empInternalid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="dept_internalid" property="deptInternalid" jdbcType="INTEGER" />
+    <result column="dept_name" property="deptName" jdbcType="VARCHAR" />
+    <result column="position" property="position" jdbcType="VARCHAR" />
+    <result column="super_internalid" property="superInternalid" jdbcType="VARCHAR" />
+    <result column="supervisor" property="supervisor" jdbcType="VARCHAR" />
+    <result column="subsidiary" property="subsidiary" jdbcType="VARCHAR" />
+    <result column="job_number" property="jobNumber" jdbcType="VARCHAR" />
+    <result column="location_name" property="locationName" jdbcType="VARCHAR" />
+    <result column="location_internalid" property="locationInternalid" jdbcType="INTEGER" />
+    <result column="flag" property="flag" jdbcType="BIT" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <!-- 根据员工id查询其手机号码 -->
+  <select id = "selectPhoneById" parameterType ="Integer" resultType="java.lang.String">
+  select mobile from ns_employee where emp_internalid = #{empInternalid}
+  </select>
+  
+  <!-- 根据员工id查询员工信息 -->
+  <select id = "selectEmpById" parameterType ="Integer" resultType="com.zing.dingding.model.NsEmployeeBean">
+  select * from ns_employee where emp_internalid = #{empInternalid}
+  </select>
+  
+  <!-- 通过手机号码查询员工信息 -->
+  <select id="selectEmpByPhone" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select * from ns_employee where mobile = #{mobile}
+  </select>
+  
+  <!-- 查找职位 -->
+  <select id="selectPositionById" parameterType="Integer" resultType="String">
+  	select position from ns_employee where emp_internalid = #{id}
+  </select>
+  
+  <!-- 查找上级 -->
+  <select id="selectSuperById" parameterType="Integer" resultType="String">
+  	select supervisor from ns_employee where emp_internalid = #{id}
+  </select>
+  
+  <!-- 把NS员工保存在本地 -->
+    <insert id="insertEmployee" parameterType="com.zing.dingding.model.NsEmployeeBean" >
+    insert into ns_employee (id, emp_internalid, name, 
+      email, mobile, dept_internalid, 
+      dept_name, position, super_internalid, 
+      supervisor, subsidiary, job_number, 
+      location_name, location_internalid, flag, 
+      last_update_time)
+    values (#{id,jdbcType=INTEGER}, #{empInternalid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{deptInternalid,jdbcType=INTEGER}, 
+      #{deptName,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{superInternalid,jdbcType=VARCHAR}, 
+      #{supervisor,jdbcType=VARCHAR}, #{subsidiary,jdbcType=VARCHAR}, #{jobNumber,jdbcType=VARCHAR}, 
+      #{locationName,jdbcType=VARCHAR}, #{locationInternalid,jdbcType=INTEGER}, 1, 
+      now())
+      on duplicate key update mobile = #{mobile}, last_update_time = now(), position = #{position}, dept_name = #{deptName}, super_internalid = #{superInternalid}, supervisor = #{supervisor}
+  </insert>
+  
+  
+  <select id="checkRepeat" parameterType="java.lang.String" resultType="java.lang.Integer">
+  	select count(*) from ns_employee where mobile = #{mobile}
+  </select>
+  
+
+
+ 
+</mapper>

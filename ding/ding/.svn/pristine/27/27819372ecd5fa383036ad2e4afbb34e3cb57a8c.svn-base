@@ -1,0 +1,16 @@
+package com.zing.dingding.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.zing.dingding.model.NsExpenseDetailBean;
+
+@Mapper
+public interface NsExpenseDetailDao {
+
+	int insert(NsExpenseDetailBean expenseBean);
+	
+	List<NsExpenseDetailBean> getExpenseDetailList(Integer internalId);
+	
+}

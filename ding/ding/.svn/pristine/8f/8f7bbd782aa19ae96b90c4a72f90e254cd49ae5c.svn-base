@@ -1,0 +1,64 @@
+package com.zing.dingding.controller;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Map;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.zing.dingding.common.Constants;
+import com.zing.dingding.common.NetSuiteAuth;
+import com.zing.dingding.common.UserUtil;
+import com.zing.dingding.service.INsApprovalService;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+@RestController
+@RequestMapping("ns")
+public class NsApprovalController {
+	@Autowired
+	INsApprovalService insService;
+	
+	@RequestMapping("purchaseList")
+	public String purchaseOrderGet(){
+		Map map = insService.getAccount();
+		String token = Constants.getAccessToken();
+		String url = UserUtil.LIST_PURCHASE_ORDER;
+		String result = "";
+		try {
+			result = NetSuiteAuth.getAuth(map, url, null);
+			if(result != null||result != ""){
+				JSONArray resultArray = JSONArray.fromObject(result);
+//					for (int i =0;i <resultArray.size();i++){
+//						JSONObject purchaseObject = JSONObject.fromObject(resultArray.get(i));
+//						String id = purchaseObject.getString("id");
+//						String type = purchaseObject.getString("recordtype");
+//						//根据id查看是否发起审批，发起过的话则不用重复进行相关操作
+//						//if（没发起审批）
+//						//1.保存明细 和 保存到审批列表,
+//						JSONObject detail = JSONObject.fromObject(purchaseObject.get("columns"));
+//						insService.saveGoodsDetail(detail, id);
+//						insService.saveApprovalList(detail, id, type);
+//					}
+					//2.去掉重复的订单号
+					Set<Integer> idSet = insService.idSetGet(resultArray);
+					
+					for (Integer id : idSet) {
+						//在判断一次是否发起审批
+						//3.发起审批
+						insService.purchaseOrderApproval(id,token);
+					}
+				
+			} 
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+}

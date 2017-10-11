@@ -1,0 +1,17 @@
+package com.zing.dingding.service;
+
+public interface IDepartmentService {
+	//批量添加部门
+	String saveDepartment(String token);
+	
+	/**
+	 * 在钉钉创建部门
+	 * @auth mark
+	 * @param deptId
+	 * @param token
+	 * @return    
+	 * @date 2017年9月8日 上午10:00:57
+	 */
+	String createDepartment(String deptId, String token);
+	
+}

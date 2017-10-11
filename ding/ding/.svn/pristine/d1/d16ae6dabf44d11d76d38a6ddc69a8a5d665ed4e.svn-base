@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mml.dingding.dao.DingUserDao">
+  <resultMap id="BaseResultMap" type="com.mml.dingding.model.DingEmpBean" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="workpalce" property="workpalce" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="org_email" property="orgEmail" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="active" property="active" jdbcType="BIT" />
+    <result column="order_in_depts" property="orderInDepts" jdbcType="VARCHAR" />
+    <result column="is_admin" property="isAdmin" jdbcType="BIT" />
+    <result column="is_boss" property="isBoss" jdbcType="BIT" />
+    <result column="ding_id" property="dingId" jdbcType="VARCHAR" />
+    <result column="unionid" property="unionid" jdbcType="VARCHAR" />
+    <result column="is_dept_leader" property="isDeptLeader" jdbcType="VARCHAR" />
+    <result column="is_hide" property="isHide" jdbcType="BIT" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="position" property="position" jdbcType="VARCHAR" />
+    <result column="avatar" property="avatar" jdbcType="VARCHAR" />
+    <result column="job_number" property="jobNumber" jdbcType="VARCHAR" />
+    <result column="extatt" property="extatt" jdbcType="VARCHAR" />
+    <result column="roles" property="roles" jdbcType="VARCHAR" />
+    <result column="roles_id" property="rolesId" jdbcType="VARCHAR" />
+    <result column="roles_name" property="rolesName" jdbcType="VARCHAR" />
+    <result column="roles_group_name" property="rolesGroupName" jdbcType="VARCHAR" />
+    <result column="is_senior" property="isSenior" jdbcType="BIT" />
+    <result column="open_id" property="openId" jdbcType="VARCHAR" />
+    <result column="order" property="order" jdbcType="INTEGER" />
+    <result column="extattr" property="extattr" jdbcType="VARCHAR" />
+  </resultMap>
+ 
+ <!-- 根据员工id获取员工信息 -->
+  <select id="getDingUser" parameterType="String" resultMap="BaseResultMap">
+  select * from ding_user where user_id = #{userId}
+  </select> 
+  
+  <!-- 通过手机号码获取个人信息 -->
+  <select id="selectDetailByPhone" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select * from ding_user where mobile = #{mobile}
+  </select>
+  
+  <select id="selIdByPhone" parameterType="java.lang.String" resultType="java.lang.String">
+  	select user_id from ding_user where mobile = #{mobile}
+  </select>
+  
+ <!-- 保存员工信息 -->
+  <insert id="insertxx" parameterType="com.mml.dingding.model.DingEmpBean">
+    insert into ding_user (user_id, name, 
+      workpalce, remark, mobile, 
+      email, org_email, tel, 
+      active, order_in_depts, is_admin, 
+      is_boss, ding_id, unionid, 
+      is_dept_leader, is_hide, department, 
+      position, avatar, job_number, 
+      extatt, roles, roles_id, 
+      roles_name, roles_group_name, is_senior, 
+      open_id, order, extattr
+      )
+    values (#{userId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{workpalce,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{orgEmail,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, 
+      #{active,jdbcType=BIT}, #{orderInDepts,jdbcType=VARCHAR}, #{isAdmin,jdbcType=BIT}, 
+      #{isBoss,jdbcType=BIT}, #{dingId,jdbcType=VARCHAR}, #{unionid,jdbcType=VARCHAR}, 
+      #{isDeptLeader,jdbcType=VARCHAR}, #{isHide,jdbcType=BIT}, #{department,jdbcType=VARCHAR}, 
+      #{position,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, #{jobNumber,jdbcType=VARCHAR}, 
+      #{extatt,jdbcType=VARCHAR}, #{roles,jdbcType=VARCHAR}, #{rolesId,jdbcType=VARCHAR}, 
+      #{rolesName,jdbcType=VARCHAR}, #{rolesGroupName,jdbcType=VARCHAR}, #{isSenior,jdbcType=BIT}, 
+      #{openId,jdbcType=VARCHAR}, #{order,jdbcType=INTEGER}, #{extattr,jdbcType=VARCHAR}
+      )
+    on duplicate key update name = #{name}
+  </insert>
+  
+     <insert id="insert" parameterType="com.mml.dingding.model.DingEmpBean" >
+    insert into ding_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="workpalce != null" >
+        workpalce,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="orgEmail != null" >
+        org_email,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="active != null" >
+        active,
+      </if>
+      <if test="orderInDepts != null" >
+        order_in_depts,
+      </if>
+      <if test="isAdmin != null" >
+        is_admin,
+      </if>
+      <if test="isBoss != null" >
+        is_boss,
+      </if>
+      <if test="dingId != null" >
+        ding_id,
+      </if>
+      <if test="unionid != null" >
+        unionid,
+      </if>
+      <if test="isDeptLeader != null" >
+        is_dept_leader,
+      </if>
+      <if test="isHide != null" >
+        is_hide,
+      </if>
+      <if test="department != null" >
+        department,
+      </if>
+      <if test="position != null" >
+        position,
+      </if>
+      <if test="avatar != null" >
+        avatar,
+      </if>
+      <if test="jobNumber != null" >
+        job_number,
+      </if>
+      <if test="extatt != null" >
+        extatt,
+      </if>
+      <if test="roles != null" >
+        roles,
+      </if>
+      <if test="rolesId != null" >
+        roles_id,
+      </if>
+      <if test="rolesName != null" >
+        roles_name,
+      </if>
+      <if test="rolesGroupName != null" >
+        roles_group_name,
+      </if>
+      <if test="isSenior != null" >
+        is_senior,
+      </if>
+      <if test="openId != null" >
+        open_id,
+      </if>
+      <if test="order != null" >
+        order,
+      </if>
+      <if test="extattr != null" >
+        extattr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="workpalce != null" >
+        #{workpalce,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="orgEmail != null" >
+        #{orgEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="active != null" >
+        #{active,jdbcType=BIT},
+      </if>
+      <if test="orderInDepts != null" >
+        #{orderInDepts,jdbcType=VARCHAR},
+      </if>
+      <if test="isAdmin != null" >
+        #{isAdmin,jdbcType=BIT},
+      </if>
+      <if test="isBoss != null" >
+        #{isBoss,jdbcType=BIT},
+      </if>
+      <if test="dingId != null" >
+        #{dingId,jdbcType=VARCHAR},
+      </if>
+      <if test="unionid != null" >
+        #{unionid,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeptLeader != null" >
+        #{isDeptLeader,jdbcType=VARCHAR},
+      </if>
+      <if test="isHide != null" >
+        #{isHide,jdbcType=BIT},
+      </if>
+      <if test="department != null" >
+        #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="avatar != null" >
+        #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="jobNumber != null" >
+        #{jobNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="extatt != null" >
+        #{extatt,jdbcType=VARCHAR},
+      </if>
+      <if test="roles != null" >
+        #{roles,jdbcType=VARCHAR},
+      </if>
+      <if test="rolesId != null" >
+        #{rolesId,jdbcType=VARCHAR},
+      </if>
+      <if test="rolesName != null" >
+        #{rolesName,jdbcType=VARCHAR},
+      </if>
+      <if test="rolesGroupName != null" >
+        #{rolesGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="isSenior != null" >
+        #{isSenior,jdbcType=BIT},
+      </if>
+      <if test="openId != null" >
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="order != null" >
+        #{order,jdbcType=INTEGER},
+      </if>
+      <if test="extattr != null" >
+        #{extattr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+    on duplicate key update name = #{name}
+  </insert>
+												  <!-- 以下 的没用到 -->
+												  <!-- 以下 的没用到 -->
+												  <!-- 以下 的没用到 -->
+												  <!-- 以下 的没用到 -->
+												  <!-- 以下 的没用到 -->
+  
+    <update id="updateDepapartment" parameterType="com.mml.dingding.model.DingEmpBean">
+  update ding_emp
+  <set>
+  <if test="roles != null">
+        roles = #{roles,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="rolesName != null">
+        roles_name = #{rolesName,jdbcType=VARCHAR},
+      </if>
+      <if test="extattr != null">
+        extattr = #{extattr,jdbcType=VARCHAR},
+      </if>
+  </set>
+  where userid = #{userid}
+  </update>
+  
+   
+    
+</mapper>

@@ -1,0 +1,80 @@
+package com.zing.dingding.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.zing.dingding.model.DingEmpBean;
+
+@SuppressWarnings("all")
+@Mapper
+public interface DingUserDao {
+	
+	/**
+	 * 根据id获取个人信息
+	 * @auth mark
+	 * @param id
+	 * @return    
+	 * @date 2017年9月5日 上午10:04:28
+	 */
+	DingEmpBean getDingUser(String id);
+	
+	
+	/**
+	 * 获取部门员工详细信息
+	 * @auth mark
+	 * @param department_id
+	 * @return    
+	 * @date 2017年9月1日 下午2:00:50
+	 */
+	List<DingEmpBean> getDetail(String department_id);
+	
+	/**
+	 * 保存员工信息
+	 * @auth mark
+	 * @param user
+	 * @return    
+	 * @date 2017年9月5日 上午9:47:20
+	 */
+	int insert(DingEmpBean user);
+	
+	/**
+	 * 通过名字查找用户ID
+	 * @param name
+	 * @return
+	 */
+	String selectIDByName(String name);
+	
+	/**
+	 * 通过手机号码查找用户详细信息
+	 * @param mobile
+	 * @return userid
+	 */
+	DingEmpBean selectDetailByPhone(String mobile);
+	
+	String selIdByPhone(String mobile);
+	
+	int countByMobile(String mobile);
+	
+	
+	/**
+	 * 好像没用了。。
+	 * 根据手机号码查询是否存在该员工数据
+	 * @param mobile
+	 * @return
+	 */
+	
+	
+	int insertSelective(DingEmpBean user);
+	
+	int insertActive(Map map);
+	
+	/**
+	 * 将钉钉获取到到的员工数据保存到本地数据库
+	 * @param map
+	 * @return
+	 */
+	int forMap(Map map);
+	int updateDepapartment(DingEmpBean user);//map有些字段无法直接插入，先存空后再修改
+}

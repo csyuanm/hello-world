@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mml.dingding.dao.NetsuiteEmployeeDao" >
+  <resultMap id="BaseResultMap" type="com.mml.dingding.model.NsEmpBean" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ns_id" property="nsId" jdbcType="INTEGER" />
+    <result column="entity_id" property="entityId" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="mobilephone" property="mobilephone" jdbcType="VARCHAR" />
+    <result column="supervisor" property="supervisor" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="image" property="image" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="subsidiary" property="subsidiary" jdbcType="VARCHAR" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="custentity_identification_number" property="custentityIdentificationNumber" jdbcType="VARCHAR" />
+    <result column="comments" property="comments" jdbcType="VARCHAR" />
+    <result column="work_calendar" property="workCalendar" jdbcType="VARCHAR" />
+    <result column="birth_date" property="birthDate" jdbcType="VARCHAR" />
+    <result column="hire_date" property="hireDate" jdbcType="VARCHAR" />
+    <result column="last_modified_date" property="lastModifiedDate" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <!-- 根据员工id查询其手机号码 -->
+  <select id = "selectPhoneById" parameterType ="java.lang.String" resultType="java.lang.String">
+  select mobilephone from ns_emp where ns_id = #{nsId}
+  </select>
+  
+  <!-- 通过手机号码查询员工信息 -->
+  <select id="selectEmpByPhone" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select * from ns_emp where mobilephone = #{mobilephone}
+  </select>
+  
+  <!-- 把NS员工保存在本地 -->
+    <insert id="insertEmployee" parameterType="com.mml.dingding.model.NsEmpBean" >
+    insert into ns_emp (id, ns_id, entity_id, 
+      title, mobilephone, supervisor, 
+      email, image, phone, 
+      subsidiary, department, location, 
+      custentity_identification_number, comments, 
+      work_calendar, birth_date, hire_date, 
+      last_modified_date)
+    values (#{id,jdbcType=INTEGER}, #{nsId,jdbcType=INTEGER}, #{entityId,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{mobilephone,jdbcType=VARCHAR}, #{supervisor,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{subsidiary,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, 
+      #{custentityIdentificationNumber,jdbcType=VARCHAR}, #{comments,jdbcType=VARCHAR}, 
+      #{workCalendar,jdbcType=VARCHAR}, #{birthDate,jdbcType=VARCHAR}, #{hireDate,jdbcType=VARCHAR}, 
+      #{lastModifiedDate,jdbcType=VARCHAR}
+      )
+     on duplicate key update mobilephone = #{mobilephone}, last_modified_date = #{lastModifiedDate}, title = #{title}, department = #{department} 
+  </insert>
+  
+  
+  
+  
+  
+  <!-- map插入 -->
+    <insert id="insert" parameterType="java.util.Map" >
+    insert into ns_emp (id, ns_id, entity_id, 
+      title, mobilephone, supervisor, 
+      email, image, phone, 
+      subsidiary, department, location, 
+      custentity_identification_number, comments, 
+      work_calendar, birth_date, hire_date, 
+      last_modified_date)
+    values (#{id,jdbcType=INTEGER}, #{nsId,jdbcType=INTEGER}, #{entityId,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{mobilephone,jdbcType=VARCHAR}, #{supervisor,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{subsidiary,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, 
+      #{custentityIdentificationNumber,jdbcType=VARCHAR}, #{comments,jdbcType=VARCHAR}, 
+      #{workCalendar,jdbcType=VARCHAR}, #{birthDate,jdbcType=VARCHAR}, #{hireDate,jdbcType=VARCHAR}, 
+      #{lastModifiedDate,jdbcType=VARCHAR})
+  </insert>
+  <!-- map插入不完全的部分通过更新方式插入 -->
+    <update id="update" parameterType="com.mml.dingding.model.NsEmpBean">
+  update ns_emp 
+  <set>
+  <if test="supervisor != null">
+        supervisor = #{supervisor,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="subsidiary != null">
+        subsidiary = #{subsidiary,jdbcType=VARCHAR},
+      </if>
+  </set>
+  where ns_id = #{nsId}
+  </update>
+  
+  
+  <select id="checkRepeat" parameterType="java.lang.String" resultType="java.lang.Integer">
+  	select count(*) from ns_emp where mobilephone = #{mobilephone}
+  </select>
+  
+
+
+ 
+</mapper>

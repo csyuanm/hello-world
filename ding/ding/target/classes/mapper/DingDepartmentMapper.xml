@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zing.dingding.dao.DingDepartmentDao" >
+  <resultMap id="BaseResultMap" type="com.zing.dingding.model.DingDepartmentBean">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="flag" property="flag" jdbcType="BIT" />
+    <result column="last_update_time" jdbcType="DATE" property="lastUpdateTime" />
+  </resultMap>
+  
+  <select id="selectIdByName" parameterType="String" resultType="String">
+  	select department_id from ding_department where name = #{name} and flag = 1
+  </select>
+  
+  <!-- 根据部门id查询部门名称 -->
+  <select id="selectNameById" parameterType="String" resultType="String">
+  	select name from ding_department where department_id = #{departmentId} and flag = 1
+  </select>
+  
+  <!-- 根据名字查询单个详细信息 -->
+  <select id="selectDetailByName" parameterType="String" resultMap="BaseResultMap">
+  	select * from ding_department where name = #{name} and flag = 1
+  </select>
+  
+  <!--根据名字查询父部门id -->
+  <select id="selectMoreByName" parameterType="String" resultType="String">
+  	select parent_id from ding_department where name = #{name} and flag = 1
+  </select>
+  
+  <!--查询相同名称的部门信息 -->
+  <select id="selectByName" parameterType="String" resultMap="BaseResultMap">
+  	select * from ding_department where name = #{name} and flag = 1
+  </select>
+  
+  
+  <!--查询该名称的部门个数  -->
+  <select id="deptCount" parameterType="String" resultType="Integer">
+  	select count(*) from ding_department where name = #{name} and flag = 1
+  </select>
+  
+  <!-- 假删除所有部门 -->
+  <update id="updateFlag" parameterType="String">
+   update ding_department set flag = 0
+  </update>
+  
+  <!-- 保存公司所有部门 -->
+  <insert id="insert" parameterType="com.zing.dingding.model.DingDepartmentBean">
+    insert into ding_department (id, department_id, name, 
+      parent_id, flag, last_update_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{departmentId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{parentId,jdbcType=VARCHAR}, 1, now()
+      )
+      on duplicate key update department_id = #{departmentId}, name = #{name}, parent_id = #{parentId}, flag = 1, last_update_time = now()
+  </insert>
+	
+</mapper>

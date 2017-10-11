@@ -1,0 +1,167 @@
+package com.zing.dingding.common;
+
+import java.io.BufferedReader;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+import org.springframework.util.StringUtils;
+
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+@SuppressWarnings("all")
+public class DingDingAuth {
+	
+	/**
+	 * post请求
+	 * @auth mark
+	 * @param jobj
+	 * @param url
+	 * @return
+	 * @throws IOException
+	 * @throws Exception    
+	 * @date 2017年9月6日 上午10:08:53
+	 */
+	public static String dingPost(JSONObject jobj, String url) throws IOException, Exception {
+		String result = null;
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpResponse response = null;
+		HttpEntity httpEntity = null;
+		HttpPost httppost = null;
+
+		StringEntity js = new StringEntity(jobj.toString(), "utf-8");
+		js.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+		httppost = new HttpPost(url);
+		httppost.setEntity(js);
+		response = httpClient.execute(httppost);
+		httpEntity = response.getEntity();
+		result = EntityUtils.toString(httpEntity, "utf-8");
+		System.out.println(result);
+		
+		return result;
+	}
+	/**
+	 * 参数是字符串，且json格式无效时
+	 * @auth mark
+	 * @param url
+	 * @param params
+	 * @return
+	 * @throws IOException
+	 * @throws Exception    
+	 * @date 2017年8月31日 下午5:40:24
+	 */
+	public static String postNoJson(String url, List<? extends NameValuePair> params) throws IOException, URISyntaxException {
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpResponse response = null;
+		HttpEntity httpEntity = null;
+		HttpPost httppost = null;
+		httppost = new HttpPost(url);
+		
+		httppost.setEntity(new UrlEncodedFormEntity(params, "utf-8"));
+		response = httpClient.execute(httppost);
+		httpEntity = response.getEntity();
+		String result = EntityUtils.toString(httpEntity, "utf-8");
+		System.out.println("result："+result);
+		return result;
+	}
+	
+	/**
+	 * post
+	 * 当不需要传json参数时，且不需要额外参数
+	 */
+	public static String dingPost2(String url) throws IOException, Exception {
+		
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost httppost = new HttpPost(url);
+		HttpResponse response = httpClient.execute(httppost);
+		HttpEntity httpEntity = response.getEntity();
+		String result = EntityUtils.toString(httpEntity, "utf-8");
+		System.out.println("result："+result);
+		return result;
+	}
+	
+
+	/**
+	 * get请求
+	 */
+	public static String getAuth(String url, String param) throws IOException, URISyntaxException {
+		if (!"".equals(param) && param != null) {
+			url = url + "&" + param;
+		}
+		URI uri = new URI(url);
+		HttpGet get = new HttpGet(uri);
+		HttpParams httpParameters = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParameters, 20000);
+		HttpConnectionParams.setSoTimeout(httpParameters, 42000);
+		get.setHeader("Content-Type", "application/json");
+		get.setHeader("Accept", "*/*");
+		HttpClient client = new DefaultHttpClient(httpParameters);
+		BufferedReader in = null;
+		HttpResponse response = client.execute(get);
+		in = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "utf-8"));
+		StringBuffer sb = new StringBuffer("");
+		String line;
+		String NL = System.getProperty("line.separator");
+		while ((line = in.readLine()) != null) {
+			sb.append(line + NL);
+		}
+		in.close();
+		String result = sb.toString();
+	//	System.out.println("请求的结果为:"+result);
+		return result;
+	}
+	
+
+
+	
+	public static String postAuth(String url, String entity) throws IOException, URISyntaxException {
+		URI uri = new URI(url);
+		HttpPost post = new HttpPost(uri);
+		HttpParams httpParameters = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParameters, 20000);
+		HttpConnectionParams.setSoTimeout(httpParameters, 42000);
+		post.setHeader("Content-Type", "application/json");
+		post.setHeader("Accept", "*/*");
+		post.setEntity(new StringEntity(entity, "utf-8"));
+		HttpClient client = new DefaultHttpClient(httpParameters);
+		BufferedReader in = null;
+		HttpResponse response = client.execute(post);
+		in = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "utf-8"));
+		System.out.println("in");
+		StringBuffer sb = new StringBuffer("");
+		String line;
+		String NL = System.getProperty("line.separator");
+		while ((line = in.readLine()) != null) {
+			sb.append(line + NL);
+		}
+		in.close();
+		String result = sb.toString();
+		return result;
+	}
+}

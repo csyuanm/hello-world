@@ -1,0 +1,129 @@
+package com.zing.dingding.model;
+
+import java.io.Serializable;
+import java.util.Date;
+
+public class NsEmployeeBean implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+
+	private Integer id;
+
+    private Integer empInternalid;
+
+    private String name;
+
+    private String email;
+
+    private String mobile;
+
+    private String deptName;
+
+    private String position;
+
+    private String subsidiary;
+
+    private String locationName;
+
+    private Integer locationInternalid;
+
+    private String headImgUrl;
+
+    private Date lastUpdateTime;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getEmpInternalid() {
+        return empInternalid;
+    }
+
+    public void setEmpInternalid(Integer empInternalid) {
+        this.empInternalid = empInternalid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile == null ? null : mobile.trim();
+    }
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName == null ? null : deptName.trim();
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position == null ? null : position.trim();
+    }
+
+    public String getSubsidiary() {
+        return subsidiary;
+    }
+
+    public void setSubsidiary(String subsidiary) {
+        this.subsidiary = subsidiary == null ? null : subsidiary.trim();
+    }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName == null ? null : locationName.trim();
+    }
+
+    public Integer getLocationInternalid() {
+        return locationInternalid;
+    }
+
+    public void setLocationInternalid(Integer locationInternalid) {
+        this.locationInternalid = locationInternalid;
+    }
+
+    public String getHeadImgUrl() {
+        return headImgUrl;
+    }
+
+    public void setHeadImgUrl(String headImgUrl) {
+        this.headImgUrl = headImgUrl == null ? null : headImgUrl.trim();
+    }
+
+    public Date getLastUpdateTime() {
+        return lastUpdateTime;
+    }
+
+    public void setLastUpdateTime(Date lastUpdateTime) {
+        this.lastUpdateTime = lastUpdateTime;
+    }
+}

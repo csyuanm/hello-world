@@ -1,0 +1,7 @@
+package com.zing.dingding.service;
+
+public interface IDepartmentService {
+	//批量添加部门
+	String saveDepartment(String token);
+	
+}

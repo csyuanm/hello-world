@@ -1,0 +1,148 @@
+package com.zing.dingding.model;
+
+import java.util.Date;
+
+public class NetsuitePurchaseApproveBean {
+	
+	private static final long serialVersionUID = 1L;
+	
+    private String custbodyapprover;
+
+    private Date trandate;
+
+    private Date duedate;
+
+    private String createdby;
+
+    private String tranid;
+
+    private Float amount;
+
+    private String location;
+
+    private String displayname;
+
+    private Float rate;
+
+    private String taxcode;
+
+    private String statusref;
+
+    private Integer quantity;
+
+    private String returnId;
+    
+    private String id;
+
+    public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getCustbodyapprover() {
+        return custbodyapprover;
+    }
+
+    public void setCustbodyapprover(String custbodyapprover) {
+        this.custbodyapprover = custbodyapprover == null ? null : custbodyapprover.trim();
+    }
+
+    public Date getTrandate() {
+        return trandate;
+    }
+
+    public void setTrandate(Date trandate) {
+        this.trandate = trandate;
+    }
+
+    public Date getDuedate() {
+        return duedate;
+    }
+
+    public void setDuedate(Date duedate) {
+        this.duedate = duedate;
+    }
+
+    public String getCreatedby() {
+        return createdby;
+    }
+
+    public void setCreatedby(String createdby) {
+        this.createdby = createdby == null ? null : createdby.trim();
+    }
+
+    public String getTranid() {
+        return tranid;
+    }
+
+    public void setTranid(String tranid) {
+        this.tranid = tranid == null ? null : tranid.trim();
+    }
+
+    public Float getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Float amount) {
+        this.amount = amount;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location == null ? null : location.trim();
+    }
+
+    public String getDisplayname() {
+        return displayname;
+    }
+
+    public void setDisplayname(String displayname) {
+        this.displayname = displayname == null ? null : displayname.trim();
+    }
+
+    public Float getRate() {
+        return rate;
+    }
+
+    public void setRate(Float rate) {
+        this.rate = rate;
+    }
+
+    public String getTaxcode() {
+        return taxcode;
+    }
+
+    public void setTaxcode(String taxcode) {
+        this.taxcode = taxcode == null ? null : taxcode.trim();
+    }
+
+    public String getStatusref() {
+        return statusref;
+    }
+
+    public void setStatusref(String statusref) {
+        this.statusref = statusref == null ? null : statusref.trim();
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getReturnId() {
+        return returnId;
+    }
+
+    public void setReturnId(String returnId) {
+        this.returnId = returnId == null ? null : returnId.trim();
+    }
+}

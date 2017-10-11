@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zing.dingding.dao.DingApproveReceiveDao" >
+  <resultMap id="BaseResultMap" type="com.zing.dingding.model.DingApproveReceiveBean" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="approver_userid_list" property="approverUseridList" jdbcType="VARCHAR" />
+    <result column="form_component_values" property="formComponentValues" jdbcType="VARCHAR" />
+    <result column="originator_dept_id" property="originatorDeptId" jdbcType="VARCHAR" />
+    <result column="originator_userid" property="originatorUserid" jdbcType="VARCHAR" />
+    <result column="process_instance_id" property="processInstanceId" jdbcType="VARCHAR" />
+    <result column="process_instance_result" property="processInstanceResult" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="DATE" />
+    <result column="finish_time" property="finishTime" jdbcType="DATE" />
+    <result column="last_update_time" property="lastUpdateTime" jdbcType="DATE" />
+  </resultMap>
+
+  <insert id="insert" parameterType="com.zing.dingding.model.DingApproveReceiveBean" >
+    insert into ding_approve_receive (id, title, approver_userid_list, 
+      form_component_values, originator_dept_id, 
+      originator_userid, process_instance_id, process_instance_result, 
+      status, create_time, finish_time, last_update_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{approverUseridList,jdbcType=VARCHAR}, 
+      #{formComponentValues,jdbcType=VARCHAR}, #{originatorDeptId,jdbcType=VARCHAR}, 
+      #{originatorUserid,jdbcType=VARCHAR}, #{processInstanceId,jdbcType=VARCHAR}, #{processInstanceResult,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE}, #{finishTime,jdbcType=DATE}, now()
+      )
+      on duplicate key update process_instance_result = #{processInstanceResult},finish_time = #{finishTime},status = #{status}, last_update_time = now()
+
+  </insert>
+  
+
+  
+   <insert id="insertxx" parameterType="com.zing.dingding.model.DingApproveReceiveBean">
+    insert into ding_approve_receive
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="approverUseridList != null" >
+        approver_userid_list,
+      </if>
+      <if test="formComponentValues != null" >
+        form_component_values,
+      </if>
+      <if test="originatorDeptId != null" >
+        originator_dept_id,
+      </if>
+      <if test="originatorUserid != null" >
+        originator_userid,
+      </if>
+      <if test="processInstanceId != null" >
+        process_instance_id,
+      </if>
+      <if test="processInstanceResult != null" >
+        process_instance_result,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="finishTime != null" >
+        finish_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="approverUseridList != null" >
+        #{approverUseridList,jdbcType=VARCHAR},
+      </if>
+      <if test="formComponentValues != null" >
+        #{formComponentValues,jdbcType=VARCHAR},
+      </if>
+      <if test="originatorDeptId != null" >
+        #{originatorDeptId,jdbcType=VARCHAR},
+      </if>
+      <if test="originatorUserid != null" >
+        #{originatorUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="processInstanceId != null" >
+        #{processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="processInstanceResult != null" >
+        #{processInstanceResult,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="finishTime != null" >
+        #{finishTime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+</mapper>

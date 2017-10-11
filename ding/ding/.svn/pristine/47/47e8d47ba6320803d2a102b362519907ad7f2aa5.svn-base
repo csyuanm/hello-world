@@ -1,0 +1,248 @@
+package com.zing.dingding.service.impl;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.zing.dingding.common.DingDingAuth;
+import com.zing.dingding.common.NetSuiteAuth;
+import com.zing.dingding.common.UserUtil;
+import com.zing.dingding.dao.DingDepartmentDao;
+import com.zing.dingding.dao.DingUserDao;
+import com.zing.dingding.dao.NsApprovalDao;
+import com.zing.dingding.dao.NsApprovalListDao;
+import com.zing.dingding.dao.NsGoodsDetailDao;
+import com.zing.dingding.model.DingDepartmentBean;
+import com.zing.dingding.model.NsApprovalListBean;
+import com.zing.dingding.model.NsEmpBean;
+import com.zing.dingding.model.NsGoodsDetailBean;
+import com.zing.dingding.service.INsApprovalService;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+@SuppressWarnings("all")
+@Service
+public class NsApprovalServiceImpl implements INsApprovalService {
+
+	@Autowired
+	NsGoodsDetailDao goodsDetailDao;
+	
+	@Autowired
+	NsApprovalListDao approvalListDao;
+	
+	@Autowired
+	DingUserDao dingUserDao;
+	
+	@Autowired
+	DingDepartmentDao departmentDao;
+	
+	@Autowired
+	NsApprovalDao approveDao;
+	
+	@Override
+	public Map getAccount() {
+		
+		Map accountMap = new HashMap();
+		accountMap.put("account", UserUtil.NS_COUNNET); // compayid=4556831
+		accountMap.put("email", UserUtil.NS_EMAIL); // 登录email
+		accountMap.put("password", UserUtil.NS_PASS);// 密码
+		accountMap.put("role", UserUtil.NS_ROLE); // roleid 默认填写18
+		
+		return accountMap;
+	}
+	
+	public String deptIdGet(String deptName){
+		String deptId = "";
+		String[] arrayName = deptName.split(":");
+		String name = arrayName[arrayName.length - 1].replace(" ", "");
+		System.out.println("name.."+name);
+		int count = departmentDao.deptCount(name);
+		if(count == 1){
+			deptId = departmentDao.selectIdByName(name);
+		}else if(count >1){
+			String parentName = arrayName[arrayName.length - 2].replace(" ", "");
+			List<DingDepartmentBean> repeatBean= departmentDao.selectByName(name);
+			//根据父id查询其名称，与parentName比较，如果相等，则其当前部门id为该部门所要id
+			for (DingDepartmentBean reBean : repeatBean) {
+				String pName = departmentDao.selectNameById(reBean.getParentId());
+				if(pName.equals(parentName)){
+					deptId = reBean.getDepartmentId();
+				}
+			}
+		}else{
+			return "查找部门出错或不存在该部门";
+		}
+		return deptId;
+	}
+	public String processPost(String nsId, String url, List<? extends NameValuePair> params){
+		// 发起审批实例
+		try {
+			String str = DingDingAuth.postNoJson(url, params);
+			System.out.println("审批结果为："+str);
+			JSONObject resultOne = JSONObject.fromObject(str);
+			JSONObject resultTwo = JSONObject
+					.fromObject(resultOne.get("dingtalk_smartwork_bpms_processinstance_create_response"));
+			JSONObject resultThree = JSONObject.fromObject(resultTwo.get("result"));
+			// 4.将返回的id写入数据库
+			String processId = resultThree.getString("process_instance_id");
+			System.out.println(processId + "...." + nsId);
+		//	purchaseDao.updateInstanceId(processId, nsId);
+			approveDao.updateReturnId(processId, nsId);
+		} catch (IOException | URISyntaxException e) {
+			e.printStackTrace();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+	@Override
+	public String purchaseOrderApproval(Integer id, String token) {
+		String url = "https://eco.taobao.com/router/rest?method=dingtalk.smartwork.bpms.processinstance.create&v=2.0&format=json&session="
+				+ token;
+		String processCode = "";
+		NsApprovalListBean approvalInfo = new NsApprovalListBean();
+		List<NsGoodsDetailBean> goodsDetailList = new ArrayList<NsGoodsDetailBean>();
+		approvalInfo = approvalListDao.getApprovalInfo(id);
+		String mobile = approvalInfo.getMobile();
+		String userId = dingUserDao.selIdByPhone(mobile);
+		String deptId = deptIdGet(approvalInfo.getDepartment());
+		goodsDetailList = goodsDetailDao.getGoodsDetailList(id);
+		//
+		//获取审批人
+		//String approverList = "";
+		JSONArray totalArray = new JSONArray();
+    	//设置单行信息
+    	JSONObject single1 = new JSONObject();
+    	JSONObject single2 = new JSONObject();
+    	JSONObject single3 = new JSONObject();
+    	JSONObject single4 = new JSONObject();
+    	JSONObject single5 = new JSONObject();
+    	single1.put("name", "供应商");
+    	single1.put("value", approvalInfo.getSupplier());
+		single2.put("name", "供应商代码");
+		single2.put("value", "");
+		single3.put("name", "采购总额");
+		single3.put("value", approvalInfo.getTotal());
+		single4.put("name", "备注");
+		single4.put("value", approvalInfo.getRemark());
+		single5.put("name", "发起日期");
+		single5.put("value", approvalInfo.getPurchaseTime());
+		//1.创建表单信息对象
+    	JSONObject detailed = new JSONObject();
+    	JSONArray outerArray = new JSONArray();
+    	
+    	for(int i = 0; i < goodsDetailList.size(); i++){
+    		JSONArray innerArray = new JSONArray();
+    		JSONObject innerObject1 = new JSONObject();
+        	JSONObject innerObject2 = new JSONObject();
+        	JSONObject innerObject3 = new JSONObject();
+        	JSONObject innerObject4 = new JSONObject();
+        	JSONObject innerObject5 = new JSONObject();
+        	NsGoodsDetailBean goodsDetail = goodsDetailList.get(i);
+        	//2.明细单行设值
+        	innerObject1.put("name", "商品代码");
+        	innerObject1.put("value", goodsDetail.getGoodsCode());
+        	innerObject2.put("name", "商品名称");
+        	innerObject2.put("value", goodsDetail.getGoodsName());
+        	innerObject3.put("name", "数量");
+        	innerObject3.put("value", goodsDetail.getQuantity());
+        	innerObject4.put("name", "单价");
+        	innerObject4.put("value", goodsDetail.getRate());
+        	innerObject5.put("name", "总价");
+        	innerObject5.put("value", goodsDetail.getTotal());
+        	//3.把明细单行添加到数组
+        	innerArray.add(innerObject1);
+        	innerArray.add(innerObject2);
+        	innerArray.add(innerObject3);
+        	innerArray.add(innerObject4);
+        	innerArray.add(innerObject5);
+        	//4.组装第几个明细
+        	outerArray.add(innerArray);
+    	}
+    	System.out.println(outerArray);
+    	//5.把组装好的值添加到明细对象
+    	detailed.put("name", "明细");
+    	detailed.put("value", outerArray);
+    	//6.把明细和单行添加到整个表单值
+    	totalArray.add(single1);
+    	totalArray.add(single2);
+    	totalArray.add(single3);
+    	totalArray.add(single4);
+    	totalArray.add(single5);
+    	totalArray.add(detailed);
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("process_code", processCode));
+		params.add(new BasicNameValuePair("originator_user_id", userId));
+		params.add(new BasicNameValuePair("dept_id", deptId));
+		params.add(new BasicNameValuePair("approvers", ""));
+		params.add(new BasicNameValuePair("form_component_values", totalArray.toString()));
+		// 四、发起审批实例
+		processPost(id.toString(), url, params);
+		return null;
+	}
+
+	@Override
+	public String saveGoodsDetail(JSONObject detail, String id) {
+		NsGoodsDetailBean goodsDetail = new NsGoodsDetailBean();
+		int internalId = Integer.parseInt(id);
+		goodsDetail.setInternalId(internalId);
+		goodsDetail.setPoNumber(detail.getString("tranid"));
+		goodsDetail.setGoodsName(detail.getString("displayname"));
+		goodsDetail.setGoodsCode(JSONObject.fromObject(detail.getString("item")).getString("name"));
+		goodsDetail.setQuantity(detail.getInt("quantity"));
+		goodsDetail.setRate(detail.getDouble("rate"));
+		goodsDetail.setTotal(detail.getDouble("amount"));
+		goodsDetailDao.insert(goodsDetail);
+		return "保存明细成功";
+	}
+
+	@Override
+	public String saveApprovalList(JSONObject detail, String id, String type) {
+		NsApprovalListBean approvalList = new NsApprovalListBean();
+		int internalId = Integer.parseInt(id);
+		approvalList.setInternalId(internalId);
+		approvalList.setType(type);
+		approvalList.setNumber(detail.getString("tranid"));
+		approvalList.setApplicant(detail.getString("entityid"));
+		approvalList.setApplicantId(JSONObject.fromObject(detail.getInt("internalid")).getInt("name"));
+		approvalList.setDepartment(JSONObject.fromObject(detail.get("department")).getString("name"));
+		approvalList.setMobile(detail.getString("mobilephone").replace(" ", ""));
+		approvalList.setSupplier(detail.getString("altname"));
+		approvalList.setTotal(detail.getDouble("formulatext"));
+		approvalList.setRemark(detail.getString("memomain"));
+		approvalList.setPurchaseTime(detail.getString("trandate").replace("/", "-"));
+		
+		//查询获取审批人
+		approvalList.setApprover("");
+		approvalListDao.insert(approvalList);
+		return null;
+	}
+
+	@Override
+	public Set idSetGet(JSONArray resultArray) {
+		List idList = new ArrayList();
+		for(int i = 0;i < resultArray.size();i++){
+			JSONObject purchaseObject = JSONObject.fromObject(resultArray.get(i));
+			int id = purchaseObject.getInt("id");
+			idList.add(id);
+		}
+		Set idSet = new LinkedHashSet();
+		idSet.addAll(idList);
+		return idSet;
+	}
+	
+	
+	
+}
