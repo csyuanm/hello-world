@@ -1,0 +1,14 @@
+ 1、把dingding的第三方jar包安装到本地maven仓库，一个一个装：
+mvn install:install-file -Dfile=xxx.jar -DgroupId=com.dingtalk -DartifactId=xxx -Dversion=1.0.0 -Dpackaging=jar
+
+2、然后一个个在pom中引入：
+<dependency>
+	<artifactId>xxx</artifactId>
+	<groupId>com.dingtalk</groupId>
+	<version>1.0.0</version>
+</dependency>
+
+3、打包：mvn -Dmaven.test.skip=true clean package
+4、运行：java -jar xxx.jar
+
+biz、common为参数校验，错误提示，暂时没用到
