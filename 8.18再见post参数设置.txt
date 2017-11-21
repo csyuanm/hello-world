@@ -1,0 +1,37 @@
+//当需要严格的json时，就应该严格的使用json对象设置参数，接收参数时需要用StringEntityhttp来接收参数
+//setEntity(new StringEntity(entity, HTTP.UTF_8))	    	
+	    	JSONObject jobj = new JSONObject();  
+			String approvers = "manager4417,02402648081143016";
+			JSONObject obj = new JSONObject();
+			obj.put("name", "报销金额");
+			obj.put("value", "2");
+			jobj.put("process_code", process_code); //审批类id7
+			jobj.put("originator_user_id", "manager4417"); //发起人id
+			jobj.put("dept_id", 45988760);//发起人所在部门
+			jobj.put("approvers", approvers);  //审批人userid列表，只需要传递字符串就可以，用逗号隔开
+			jobj.put("form_component_values", obj); // 审批内容
+			Post = new HttpPost(url);
+			Post.setEntity(new StringEntity(jobj, HTTP.UTF_8));
+
+
+
+
+//设置Post参数     ，当不需要用json来发送post请求时，应当使用NameValuePair来设置参数,如下所示
+			//httppost.setEntity(new UrlEncodedFormEntity(params,"utf-8"));
+
+
+
+			String url = "https://eco.taobao.com/router/rest?method=dingtalk.smartwork.bpms.processinstance.create&v=2.0&format=json&session="+access_token;
+			
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			params.add(new BasicNameValuePair("process_code", process_code));
+			params.add(new BasicNameValuePair("originator_user_id", "manager4417"));
+			params.add(new BasicNameValuePair("dept_id", "45988760"));
+			params.add(new BasicNameValuePair("approvers", approvers));
+			params.add(new BasicNameValuePair("form_component_values", obj.toString()));
+			httppost = new HttpPost(url);
+			httppost.setEntity(new UrlEncodedFormEntity(params, "utf-8"));
+			System.out.println(httppost.getURI());
+			response = httpClient.execute(httppost);
+			httpEntity = response.getEntity();
+			str = EntityUtils.toString(httpEntity, "utf-8");

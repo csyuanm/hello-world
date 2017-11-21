@@ -1,0 +1,33 @@
+ 1.resultType跟resultMap 作为映射的区别
+ a.两者不能同时使用
+resultType：适合使用返回值得数据类型是非自定义的，即jdk的提供的类型
+使用resultType时，mybatis会自动把表字段映射到实体类中，但是如果实体类中定义的字段跟数据表中的对应不上时（如出现下划线），会出现null。
+这个时候可以把resultType改为resultmap，也可以通过别名。
+resultMap：适合使用返回值是自定义实体类的情况，在使用关联查询时，一般使用resultmap
+
+resultMap ： 
+映射实体类的数据类型
+resultMap的唯一标识
+column: 库表的字段名
+property： 实体类里的属性名
+
+2.EJB跟POJO(普通java类)的区别
+POJO是一个简单的java对象，不受任何限制，不包含业务逻辑和持久逻辑，不继承或实现
+EJB是J2EE中一套规范，POJO可以理解为简单的实体类，提供getter个stter方法，方便操作数据表
+EJB称为Java 企业Bean，是Java的核心代码，分别是会话Bean（Session Bean），实体Bean（Entity Bean）和消息驱动Bean（MessageDriven Bean）。
+Session bean用于实现业务逻辑，可以是有状态和无状态，每当客户端请求时，容器会选择一个session bean 来为客户端服务。session bean也可以直接访问数据库，但是一般推荐通过entity bean进行数据访问
+Entity Bean是域模型（实体）对象，用于实现O/R映射，负责将数据库中的表记录映射为内存中的Entity对象
+MessageDriven Bean是EJB2.0中引入的新的企业Bean，它基于JMS消息，只能接收客户端发送的JMS消息然后处理。MDB实际上是一个异步的无状态SessionBean，客户端调用MDB后无需等待，立刻返回，MDB将异步处理客户请求。
+这适合于需要异步处理请求的场合，比如订单处理，这样就能避免客户端长时间的等待一个方法调用直到返回结果。
+
+3.MQ和JMS,ActiveMQ的区别
+http://blog.csdn.net/zzjjiandan/article/details/23746233
+消息队列（MQ）是一种应用程序对应用程序的通信方法，通过消息发送数据进行通信，而不是通过直接调用来通信。解决了发送和接收同时执行的要求
+JMS（java Messaging Service）是Java平台上有关面向消息中间件(MOM)的技术规范，
+它便于消息系统中的Java应用程序进行消息交换,并且通过提供标准的产生、发送、接收消息的接口简化企业应用的开发，翻译为Java消息服务。
+JMS和MQ的关系：
+JMS是一个用于提供消息服务的技术规范，它制定了在整个消息服务提供过程中的所有数据结构和交互流程。
+而MQ则是消息队列服务，是面向消息中间件（MOM）的最终实现，是真正的服务提供者；MQ的实现可以基于JMS，也可以基于其他规范或标准。
+
+4.java异常处理
+http://lavasoft.blog.51cto.com/62575/18920/

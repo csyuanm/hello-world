@@ -1,0 +1,14 @@
+1.删除字符串中指定字符串的方法（可以采用“”替换）
+str = s.repalceAll("删除的字符串","");
+
+2.从一个数组中截取一定长度的元素放到新数组中
+直接用Arrays的静态方法copyOfRange(int[] original, int from, int to)
+
+3.list转从带逗号的字符串  [1,2,3,4,5] -> 1,2,3,4,5
+list(集合)
+str = StringUtils.collectionToDelimitedString(list, ","); 
+数组
+str = StringUtils.arrayToDelimitedString(nameList2, ",");
+
+4.spring boot  logback日志配置
+http://www.jb51.net/article/118849.htm

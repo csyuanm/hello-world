@@ -1,0 +1,26 @@
+ 一、try catch 异常
+ try..catch..finally异常处理机制，用于扑抓异常，可嵌套使用。当for循环内使用try..catch时，出现异常会自动跳过本次循环。
+ 
+ 二、日志处理
+logging.file，设置文件，可以是绝对路径，也可以是相对路径。如：logging.file=my.log
+logging.path，设置目录，会在该目录下创建spring.log文件，并写入日志内容，如：logging.path=/var/log
+
+logging.level.* = LEVEL'
+logging.level：日志级别控制前缀，*为包名或Logger名
+LEVEL：选项TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF
+
+三、事务处理
+事务提供了一种机制，可用来将一系列数据库更改归入一个逻辑操作。要么全执行，要么全不执行。具有原子性、一致性、隔离性、持续性。
+事务可以添加在controller或者service层，一般建议在service层。
+事务有以下3种运行模式。
+自动提交事务：每条单独的语句都是一个事务。
+显式事务：每个事务均以BEGIN TRANSACTION语句显式开始，以COMMIT或ROLLBACK语句显式结束。
+隐性事务：在上个事务完成时新事务隐式启动，但每个事务仍以COMMIT或ROLLBACK语句显式完成。
+
+Service中，首先使用注解 @EnableTransactionManagement 开启事务支持后，然后在访问数据库的Service方法上添加注解 @Transactional 便可。
+被 @Transactional 注解的方法，将支持事务。如果注解在类上，则整个类的所有方法都默认支持事务。
+@Transactional 只能被应用到public方法上, 对于其它非public的方法,如果标记了@Transactional也不会报错,但方法没有事务功能.
+
+在线Cron表达式生成器
+
+http://cron.qqe2.com/

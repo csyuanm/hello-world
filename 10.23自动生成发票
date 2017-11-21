@@ -1,0 +1,19 @@
+ 2.0，一般不自动生成，而是使用transform
+ 
+ var invRec = record.transform({
+    fromType: record.Type.CUSTOMER,
+    fromId: custId,
+    toType: record.Type.INVOICE,
+    isDynamic: true,
+    defaultValues: {customform:296}
+});
+
+else
+
+var invRec = record.transform({
+    fromType: record.Type.SALES_ORDER,
+    fromId: soId,
+    toType: record.Type.INVOICE,
+    isDynamic: true,
+    defaultValues: {customform:296}
+});

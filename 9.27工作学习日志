@@ -1,0 +1,25 @@
+一、String、stringBuffer、stringBuilder三者的区别
+（1）string
+
+       1，Stirng是对象不是基本数据类型 
+       2，String是final类，不能被继承。是不可变对象，一旦创建，就不能修改它的值。 
+       3，对于已经存在的Stirng对象，修改它的值，就是重新创建一个对象，然后将新值赋予这个对象 
+
+（2）stringBuffer
+
+　　 1，一个类似于 String 的字符串缓冲区，对它的修改的不会像String那样重创建对象。 
+　　 2，使用append()方法修改Stringbuffer的值，使用toString()方法转换为字符串。 
+
+（3）stringBuilder
+
+       是jdk1.5后用来替换stringBuffer的一个类，大多数时候可以替换StringBuffer。
+	   和StringBuffer的区别在于Stringbuild是一个单线程使用的类，不值执行线程同步所以比              StringBuffer的速度快，效率高。是线程非安全的。
+
+（4）区别，联系
+string跟stringBuffer区别：
+当对某一字符串相加是，stringBuffer的效率比string要快的多。所以对于可变的字符串一般使用stringBuffer
+stringBuffer跟stringBuilder的区别：
+Stringbuilder线程不安全，StringBuffer线程安全。在不循环相加字符串的情况下，性能几乎没啥区别，因为字符串拼接的正确性是由锁决定的！！
+stringbuffer的线程安全，仅仅是保证jvm不抛出异常顺利的往下执行而已，它可不保证逻辑正确和调用顺序正确。大多数时候，我们需要的不仅仅是线程安全，而是锁。
+
+https://www.zhihu.com/question/20101840

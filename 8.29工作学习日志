@@ -1,0 +1,21 @@
+1. js  把json字符串转化成json对象
+转化：
+var obj = str.parseJSON(); //由JSON字符串转换为JSON对象
+或者
+var obj = JSON.parse(str); //由JSON字符串转换为JSON对象
+转化之后取值：对于某个key可以直接用对象.key
+obj.key.key1.key2;
+obj.key;
+
+2.获取当前时间的前几日、月、年cal.DATE cal.MONTH cal.YEAR
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		System.out.println("现在的时间为："+cal.getTime());
+		cal.add(cal.DATE, -5);
+		System.out.println("五天前的时间为："+cal.getTime());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = sdf.parse(sdf.format(cal.getTime()));
+		System.out.println("格式化时间后："+sdf.format(cal.getTime()));
+		startTime = date.getTime();
+		System.out.println("五天前的时间为："+startTime);

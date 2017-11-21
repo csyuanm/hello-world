@@ -1,0 +1,45 @@
+一、netsuite 解除查询结果1000行限制
+方法1：按内部编号排序，然后搜索记录，其中内部ID大于上次运行的最旧ID创建
+  一个全局变量，并更新每次脚本进入for循环（您可以根据需要改变逻辑），
+  现在添加一个逻辑下一次运行，大部分时间我添加逻辑，如
+var lastprocessed = 0; 
+do 
+{ 
+if（lastprocessed> 0）
+{ 
+     add filter for internalidnumber greater than lastprocessed;
+    var searchresults = nlapiSearchRecord(... ...);
+    for（var i = 0; i <= searchresults.length; i ++）
+   { 
+             //添加您的逻辑
+            lastprocessed = searchresults [i] .getId（）; 
+    } 
+} 
+ //添加搜索逻辑和过滤器
+} while（searchresults.length == 1000）; 
+
+方法2: Records which are processed by script , add them to an array and then :
+var itemids= [];//this item will have list of all items processed already
+   var filters = [];
+do()
+{ 
+if(itemids && (itemids.length > 0))
+    filters.push( new nlobjSearchFilter('internalid', null,  'anyof', itemids ) );
+   
+    var searchRecordResults = nlapiSearchRecord( 'item',null, filters, null );
+for(var i=0; i<searchRecordResults .length; i++)
+{
+     var internlid = searchRecordResults[i].getId();
+     itemids.push(internalid);
+} 
+}while(searchRecordResults .length == 1000);
+
+方法 3: 通过两个结果，每个结果作为数据元素，然后添加到数组。
+
+1.预算额度
+2.拒绝状态
+3.查询结果1000行限制
+4.审批测试例子少
+5.修改手机号码，只能在钉钉修改，所以改号码的时候记得在NS里边也改
+6.经理跟副经理的审批有什么不同？
+7.离职的员工记录删除处理

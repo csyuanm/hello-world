@@ -1,0 +1,3 @@
+ pom.xml文件中groupId、artifactId怎么写
+ http://blog.csdn.net/wabiaozia/article/details/52798194   第八点
+ groupId、artifactId分别对于存在本地中文件夹的一二级路径

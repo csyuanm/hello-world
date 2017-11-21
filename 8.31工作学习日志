@@ -1,0 +1,29 @@
+1.http基本认证
+ http请求中，authorization 用于识别带账号密码的登录
+ get.setHeader("Authorization", authorization(map))
+ 
+ .setHeader等各类参数
+ http://blog.csdn.net/fanyuna/article/details/5568089
+ 
+ 2.springMVC中的统一异常处理
+ 
+ 如果被调用的方法中抛出了异常，那么调用之后必须要处理异常，或者在方法再抛出异常
+ 
+ http://blog.csdn.net/eson_15/article/details/51731567   springMVC
+ http://blog.csdn.net/haiyan_qi/article/details/55805787  springboot
+ 
+ 3.http路径的设置（get） 某种
+ URI uri = new URIBuilder().setScheme("https").setHost("oapi.dingtalk.com").setPath("/user/simplelist")
+					.setParameter("access_token", access_token).setParameter("department_id", department_id).build();
+					
+4.字符串list转String[]
+List<String> userList = new ArrayList<>();
+String[] ss = userList.toArray(new String[userList.size()]);
+字符串分割.split(""),分割的结果是一个字符串数组
+String arr[] = birth.split("/");/
+
+
+
+方法！！
+根据名称和内部id，获取员工手机号码，然后通过手机号码查询所在钉钉部门
+			

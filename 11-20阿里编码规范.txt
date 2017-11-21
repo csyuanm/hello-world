@@ -1,0 +1,504 @@
+1.方法名、参数名、成员变量、局部变量都统一使用lowerCamelCase，必须遵从驼峰形式
+2. 不允许任何魔法值（即未经定义的常量）直接出现在代码中。
+Examples
+Negative example:
+    //Magic values, except for predefined, are forbidden in coding.
+    if (key.equals("Id#taobao_1")) {
+            //...
+    }   
+Positive example:
+    String KEY_PRE = "Id#taobao_1";  
+    if (KEY_PRE.equals(key)) {
+            //...
+    }   
+3*.在subList场景中，高度注意对原列表的修改，会导致子列表的遍历、增加、删除均产生ConcurrentModificationException异常。
+Examples   
+Negative example:                
+   List<String> originList = new ArrayList<String>();
+   originList.add("22");
+   List<String> subList = originList.subList(0, 1);
+   //warn
+   originList.add("22"); 
+4.避免Random实例被多线程使用，虽然共享该实例是线程安全的，但会因竞争同一seed 导致的性能下降。
+说明：Random实例包括java.util.Random 的实例或者 Math.random()的方式。
+Examples
+   
+Positive example 1：
+    /**
+     * @author caikang
+     * @date 2017/04/07
+     */
+    public class RandomInThread extends Thread {
+        private Random random = new Random();
+
+        @Override
+        public void run() {
+            long t = random.nextLong();
+        }
+    }   
+Positive example 2：
+    /**
+     * @author caikang
+     * @date 2017/04/07
+     */
+    public class RandomInThread extends Thread {
+        private Random random = ThreadLocalRandom.current();
+
+        @Override
+        public void run() {
+            long t = random.nextLong();
+        }
+    } 
+	
+注意：
+说明：使用线程池的好处是减少在创建和销毁线程上所花的时间以及系统资源的开销，解决资源不足的问题。
+如果不使用线程池，有可能造成系统创建大量同类线程而导致消耗完内存或者“过度切换”的问题。
+ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
+        .setNameFormat("demo-pool-%d").build();
+    ExecutorService singleThreadPool = new ThreadPoolExecutor(1, 1,
+        0L, TimeUnit.MILLISECONDS,
+        new LinkedBlockingQueue<Runnable>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+
+    singleThreadPool.execute(()-> System.out.println(Thread.currentThread().getName()));
+    singleThreadPool.shutdown(); 
+
+
+5.异常类命名使用Exception结尾
+public class CacheDemoException extends Exception{
+    }  
+
+6.ArrayList的subList结果不可强转成ArrayList，否则会抛出ClassCastException异常。
+   说明:禁止强转，如果需要用到集合特性方法，请新建一个集合，然后置入sublist,new 集合(sublist结果)。	
+   Negative example:
+   List<String> list = new ArrayList<String>();
+   list.add("22");
+   //warn
+   List<String> test = (ArrayList<String>) list.subList(0, 1);   
+Positive example:
+   List<String> list2 = new ArrayList<String>(list.subList(0, 1));   
+7.Map/Set的key为自定义对象时，必须重写hashCode和equals。
+Description
+   关于hashCode和equals的处理，遵循如下规则：
+   1） 只要重写equals，就必须重写hashCode。
+   2） 因为Set存储的是不重复的对象，依据hashCode和equals进行判断，所以Set存储的对象必须重写这两个方法。
+   3） 如果自定义对象做为Map的键，那么必须重写hashCode和equals。
+   
+8.避免通过一个类的对象引用访问此类的静态变量或静态方法，无谓增加编译器解析成本，直接用类名来访问即可。（需理解JVM）
+9.除常用方法（如getXxx/isXxx）等外，不要在条件判断中执行复杂的语句，将复杂逻辑判断的结果赋值给一个有意义的布尔变量，以提高可读性。
+说明：很多if语句内的逻辑相当复杂，阅读者需要分析条件表达式的最终结果，才能明确什么样的条件执行什么样的语句，那么，如果阅读者分析逻辑表达式错误呢？
+Negative example:
+    if ((file.open(fileName, "w") != null) && (...) || (...)) {
+        // ...
+    }   
+Positive example:
+    boolean existed = (file.open(fileName, "w") != null) && (...) || (...);
+    if (existed) {
+        //...
+    }   
+10. 所有的覆写方法，必须加@Override注解。加@Override可以准确判断是否覆盖成功。另外，如果在抽象类中对方法签名进行修改，其实现类会马上编译报错。
+11.方法内部单行注释，在被注释语句上方另起一行，使用//注释。方法内部多行注释使用/* */注释。注意与代码对齐。
+12.返回类型为基本数据类型，return包装数据类型的对象时，自动拆箱有可能产生NPE
+public int method() {
+        Integer a = null;
+        return a;
+    }  
+13.循环体内，字符串的联接方式，使用StringBuilder的append方法进行扩展。
+ 说明：反编译出的字节码文件显示每次循环都会new出一个StringBuilder对象，然后进行append操作，最后通过toString方法返回String对象，造成内存资源浪费。
+Negative example:
+    String result;
+    for (String string : tagNameList) {
+        result = result + string;
+    }   
+Positive example:
+    StringBuilder stringBuilder = new StringBuilder();
+    for (String string : tagNameList) {
+        stringBuilder.append(string);
+    }
+    String result = stringBuilder.toString(); 
+14.在if/else/for/while/do语句中必须使用大括号，即使只有一行代码，避免使用下面的形式：if (condition) statements;
+15.SimpleDateFormat 是线程不安全的类，一般不要定义为static变量，如果定义为static，必须加锁，或者使用DateUtils工具类。
+ 说明：如果是JDK8的应用，可以使用instant代替Date，LocalDateTime代替Calendar，DateTimeFormatter代替SimpleDateFormat，
+ 官方给出的解释：simple beautiful strong immutable thread-safe。
+Positive example 1：
+    private static final String FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public String getFormat(Date date){
+        SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT);
+        return sdf.format(date);
+    }   
+Positive example 2：
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public void getFormat(){
+        synchronized (sdf){
+        sdf.format(new Date());
+        ….;
+    }   
+Positive example 3：
+    private static final ThreadLocal<DateFormat> DATE_FORMATTER = new ThreadLocal<DateFormat>() {
+        @Override
+        protected DateFormat initialValue() {
+            return new SimpleDateFormat("yyyy-MM-dd");
+        }
+    }; 
+16.POJO类必须写toString方法。使用工具类source> generate toString时，如果继承了另一个POJO类，注意在前面加一下super.toString。
+说明：在方法执行抛出异常时，可以直接调用POJO的toString()方法打印其属性值，便于排查问题。
+public class ToStringDemo extends Super{
+        private String secondName;
+
+        @Override
+        public String toString() {
+            return super.toString() + "ToStringDemo{" + "secondName='" + secondName + '\'' + '}';
+        }
+    }
+
+    class Super {
+        private String firstName;
+
+        @Override
+        public String toString() {
+            return "Super{" + "firstName=" + firstName + '\'' + '}';
+        }
+    }   
+17.说明：Apache BeanUtils性能较差，可以使用其他方案比如Spring BeanUtils, Cglib BeanCopier。
+TestObject a = new TestObject();
+    TestObject b = new TestObject();
+    a.setX(b.getX());
+    a.setY(b.getY());  
+18.类名使用UpperCamelCase风格，必须遵从驼峰形式，但以下情形例外：（领域模型的相关命名）DO / BO / DTO / VO / DAO
+19.注意 Math.random() 这个方法返回是double类型，注意取值的范围[0,1)（能够取到零值，注意除零异常），
+如果想获取整数类型的随机数，不要将x放大10的若干倍然后取整，直接使用Random对象的nextInt或者nextLong方法。
+Negative example:
+    Long randomLong =(long) (Math.random() * 10);   
+Positive example:
+    Long randomLong = new Random().nextLong();
+20.不能在finally块中使用return，finally块中的return返回后方法结束执行，不会再执行try块中的return语句。
+Negative example:
+    public static Long readFileLength(String fileName) {
+        try {
+            File file = new File(fileName);
+            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
+            return randomAccessFile.length();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            countDownLatch.countDown();
+            return 0L;
+        }
+    } 
+21.使用CountDownLatch进行异步转同步操作，每个线程退出前必须调用countDown方法，线程执行代码注意catch异常，
+确保countDown方法可以执行，避免主线程无法执行至await方法，直到超时才返回结果。
+说明：注意，子线程抛出异常堆栈，不能在主线程try-catch到
+public class CountDownExample {
+        public void operate(CountDownLatch countDownLatch){
+            try{
+                System.out.println("business logic");
+            }catch (RuntimeException e){
+                // do something
+            }finally {
+                countDownLatch.countDown();
+            }
+        }
+    }   
+22.iBATIS自带的queryForList(String statementName,int start,int size)不推荐使用
+23.获取当前毫秒数：System.currentTimeMillis(); 而不是new Date().getTime();
+ 说明：如果想获取更加精确的纳秒级时间值，用System.nanoTime。在JDK8中，针对统计时间等场景，推荐使用Instant类。
+public class TimeMillisDemo {
+        public static void main(String args[]) {
+            // Positive example:
+            long a = System.currentTimeMillis();
+            // Negative example:
+            long b = new Date().getTime();
+    
+            System.out.println(a);
+            System.out.println(b);
+        }
+    }   
+23.在一个switch块内，每个case要么通过break/return等来终止，
+要么注释说明程序将继续执行到哪一个case为止；在一个switch块内，都必须包含一个default语句并且放在最后，即使它什么代码也没有。
+switch (x) {
+        case 1:
+            break;
+        case 2:
+            break;
+        default:
+    } 
+25.关于基本数据类型与包装数据类型的使用标准如下：
+1） 所有的POJO类属性必须使用包装数据类型。
+2） RPC方法的返回值和参数必须使用包装数据类型。
+3） 所有的局部变量推荐使用基本数据类型。
+说明：POJO类属性没有初值是提醒使用者在需要使用时，必须自己显式地进行赋值，任何NPE问题，或者入库检查，都由使用者来保证。
+public class DemoDO {
+        String str;
+        Integer a;
+    } 
+26.POJO类中的任何布尔类型的变量，都不要加is，否则部分框架解析会引起序列化错误
+public class DemoDO{
+        Boolean success;
+        Boolean delete;
+    } 
+27.线程池不允许使用Executors去创建，而是通过ThreadPoolExecutor的方式，这样的处理方式让写的同学更加明确线程池的运行规则，规避资源耗尽的风险。
+说明：Executors各个方法的弊端：
+   1）newFixedThreadPool和newSingleThreadExecutor:
+     主要问题是堆积的请求处理队列可能会耗费非常大的内存，甚至OOM。
+   2）newCachedThreadPool和newScheduledThreadPool:
+     主要问题是线程数最大数是Integer.MAX_VALUE，可能会创建数量非常多的线程，甚至OOM。
+   
+  Positive example 1：
+    //org.apache.commons.lang3.concurrent.BasicThreadFactory
+    ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1,
+        new BasicThreadFactory.Builder().namingPattern("example-schedule-pool-%d").daemon(true).build());   
+Positive example 2：
+    ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
+        .setNameFormat("demo-pool-%d").build();
+
+    //Common Thread Pool
+    ExecutorService pool = new ThreadPoolExecutor(5, 200,
+        0L, TimeUnit.MILLISECONDS,
+        new LinkedBlockingQueue<Runnable>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+
+    pool.execute(()-> System.out.println(Thread.currentThread().getName()));
+    pool.shutdown();//gracefully shutdown   
+Positive example 3：
+    <bean id="userThreadPool"
+        class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="10" />
+        <property name="maxPoolSize" value="100" />
+        <property name="queueCapacity" value="2000" />
+
+    <property name="threadFactory" value= threadFactory />
+        <property name="rejectedExecutionHandler">
+            <ref local="rejectedExecutionHandler" />
+        </property>
+    </bean>
+    //in code
+    userThreadPool.execute(thread);  
+28. 后台输送给页面的变量必须加感叹号，${var}——中间加感叹号！。
+ 说明：如果var=null或者不存在，那么${var}会直接显示在页面上。
+ <input type="text" name="email" value="$!email"/>
+    <input type="text" name="email" value="$!{email}"/>  
+29.不能使用过时的类或方法
+事务场景中，抛出异常被catch后，如果需要回滚，一定要手动回滚事务。
+Positive example 1：
+    /**
+     * @author caikang
+     * @date 2017/04/07
+     */
+    @Service
+    @Transactional(rollbackFor = Exception.class)
+    public class UserServiceImpl implements UserService {
+        @Override
+        public void save(User user) {
+            //some code
+            //db operation
+        }
+    }   
+Positive example 2：
+    /**
+     * @author caikang
+     * @date 2017/04/07
+     */
+    @Service
+    public class UserServiceImpl implements UserService {
+        @Override
+        @Transactional(rollbackFor = Exception.class)
+        public void save(User user) {
+            //some code
+            //db operation
+        }
+    }   
+Positive example 3：
+    /**
+     * @author caikang
+     * @date 2017/04/07
+     */
+    @Service
+    public class UserServiceImpl implements UserService {
+        @Autowired
+        private DataSourceTransactionManager transactionManager;
+
+        @Override
+        @Transactional
+        public void save(User user) {
+            DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+            // explicitly setting the transaction name is something that can only be done programmatically
+            def.setName("SomeTxName");
+            def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+
+            TransactionStatus status = transactionManager.getTransaction(def);
+            try {
+                // execute your business logic here
+                //db operation
+            } catch (Exception ex) {
+                transactionManager.rollback(status);
+                throw ex;
+            }
+        }
+    } 
+30.Object的equals方法容易抛空指针异常，应使用常量或确定有值的对象来调用equals。
+public void f(String str){
+        String inner = "hi";
+        if (inner.equals(str)) {
+            System.out.println("hello world");
+        }
+    }
+31.抽象类命名使用Abstract或Base开头
+32.不要在foreach循环里进行元素的remove/add操作，remove元素请使用Iterator方式
+Negative example:   
+   List<String> originList = new ArrayList<String>();
+   originList.add("22");
+   for (String item : originList) { 
+      //warn
+      list.add("bb");
+   }   
+Positive example: 
+   Iterator<Integer> it=b.iterator();		 
+   while(it.hasNext()){                      
+      Integer temp =  it.next();             
+      if (delCondition) {
+          it.remove();
+      }
+   }   
+ 33. 所有的包装类对象之间值的比较，全部使用equals方法比较。
+ 说明：对于Integer var=?在-128至127之间的赋值，Integer对象是在IntegerCache.cache产生，会复用已有对象，这个区间内的Integer值可以直接使用==进行判断，
+ 但是这个区间之外的所有数据，都会在堆上产生，并不会复用已有对象，这是一个大坑，推荐使用equals方法进行判断
+ Integer a = 235;
+    Integer b = 235;
+    if (a.equals(b)) {
+        // code
+    } 
+34.多线程并行处理定时任务时，Timer运行多个TimeTask时，只要其中之一没有捕获抛出的异常，其它任务便会自动终止运行，使用ScheduledExecutorService则没有这个问题。
+//org.apache.commons.lang3.concurrent.BasicThreadFactory
+    ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1,
+        new BasicThreadFactory.Builder().namingPattern("example-schedule-pool-%d").daemon(true).build());
+    executorService.scheduleAtFixedRate(new Runnable() {
+        @Override
+        public void run() {
+            //do something
+        }
+    },initialDelay,period, TimeUnit.HOURS); 
+35.所有的抽象方法（包括接口中的方法）必须要用javadoc注释、除了返回值、参数、异常说明外，还必须指出该方法做什么事情，实现什么功能。
+说明：如有实现和调用注意事项，请一并说明
+36.集合初始化时，指定集合初始值大小。
+说明：HashMap使用如下构造方法进行初始化，如果暂时无法确定集合大小，那么指定默认值（16）即可。
+Negative example:   
+   Map<String, String> map = new HashMap<String, String>();   
+Positive example: 
+   Map<String, String> map = new HashMap<String, String>(16); 
+ 37. 类、类属性、类方法的注释必须使用javadoc规范，使用/**内容*/格式，不得使用//xxx方式和/*xxx*/方式。
+ 说明：在IDE编辑窗口中，javadoc方式会提示相关注释，生成javadoc可以正确输出相应注释；
+ 在IDE中，工程调用方法时，不进入方法即可悬浮提示方法、参数、返回值的意义，提高阅读效率。
+ 38.测试类命名以它要测试的类的名称开始，以Test结尾
+ 39.必须回收自定义的ThreadLocal变量，尤其在线程池场景下，线程经常会被复用，如果不清理自定义的 ThreadLocal变量，可能会影响后续业务逻辑和造成内存泄露等问题。
+ 尽量在代理中使用try-finally块进行回收。
+  public class UserHolder {
+        private static final ThreadLocal<User> userThreadLocal = new ThreadLocal<User>();
+
+        public static void set(User user){
+            userThreadLocal.set(user);
+        }
+
+        public static User get(){
+            return userThreadLocal.get();
+        }
+
+        public static void remove(){
+            userThreadLocal.remove();
+        }
+    }
+    /**
+     * @author caikang
+     * @date 2017/04/07
+     */
+    public class UserInterceptor extends HandlerInterceptorAdapter {
+        @Override
+        public boolean preHandle(HttpServletRequest request,
+            HttpServletResponse response, Object handler) throws Exception {
+            UserHolder.set(new User());
+            return true;
+        }
+        @Override
+        public void afterCompletion(HttpServletRequest request,
+            HttpServletResponse response, Object handler, Exception ex) throws Exception {
+            UserHolder.remove();
+        }
+    }   
+40.创建线程或线程池时请指定有意义的线程名称，方便出错时回溯。创建线程池的时候请使用带ThreadFactory的构造函数，
+并且提供自定义ThreadFactory实现或者使用第三方实现。
+hreadFactory namedThreadFactory = new ThreadFactoryBuilder()
+        .setNameFormat("demo-pool-%d").build();
+    ExecutorService singleThreadPool = new ThreadPoolExecutor(1, 1,
+        0L, TimeUnit.MILLISECONDS,
+        new LinkedBlockingQueue<Runnable>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+
+    singleThreadPool.execute(()-> System.out.println(Thread.currentThread().getName()));
+    singleThreadPool.shutdown();   
+public class TimerTaskThread extends Thread {
+        public TimerTaskThread(){
+        super.setName("TimerTaskThread"); …
+    }   
+41. 包名统一使用小写，点分隔符之间有且仅有一个自然语义的英语单词。包名统一使用单数形式，但是类名如果有复数含义，类名可以使用复数形式
+42.及时清理不再使用的代码段或配置信息。
+说明：对于垃圾代码或过时配置，坚决清理干净，避免程序过度臃肿，代码冗余。
+43.常量命名应该全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长
+44.long或者Long初始赋值时，必须使用大写的L，不能是小写的l，小写容易跟数字1混淆，造成误解。
+45.中括号是数组类型的一部分，数组定义如下：String[] args
+String[] a = new String[3];
+46. 所有编程相关的命名均不能以下划线或美元符号开始
+47.在使用正则表达式时，利用好其预编译功能，可以有效加快正则匹配速度。
+ 说明：不要在方法体内定义：Pattern pattern = Pattern.compile(规则);
+ public class XxxClass {
+        // Use precompile
+        private static Pattern NUMBER_PATTERN = Pattern.compile("[0-9]+");
+        public Pattern getNumberPattern() {
+            // Avoid use Pattern.compile in method body.
+            Pattern localPattern = Pattern.compile("[0-9]+");
+            return localPattern;
+        }
+    }  
+48.对于Service和DAO类，基于SOA的理念，暴露出来的服务一定是接口，内部的实现类用Impl的后缀与接口区别
+public interface DemoService{
+        void f();
+    }
+
+    public class DemoServiceImpl implements DemoService {
+        @Override
+        public void f(){
+            System.out.println("hello world");
+        }
+    }   
+49. 使用集合转数组的方法，必须使用集合的toArray(T[] array)，传入的是类型完全一样的数组，大小就是list.size()
+Negative example:  
+   Integer[] a = (Integer [])c.toArray();   
+Positive example： 
+   Integer[] b = (Integer [])c.toArray(new Integer[c.size()]);  
+ 50.所有的枚举类型字段必须要有注释，说明每个数据项的用途。
+ public enum TestEnum {
+        /**
+         * agree
+         */
+        agree("agree"),
+        /**
+         * reject
+         */
+        reject("reject");
+        
+        private String action;
+    
+        TestEnum(String action) {
+            this.action = action;
+        }
+    
+        public String getAction() {
+            return action;
+        }
+    }  
+51.使用工具类Arrays.asList()把数组转换成集合时，不能使用其修改集合相关的方法，它的add/remove/clear方法会抛出UnsupportedOperationException异常。
+Positive example:
+   List<String> t   = Arrays.asList("a","b","c"); 
+   //warn
+   t.add("22");
+   //warn
+   t.remove("22");
+   //warn
+   t.clear(); 
+   52. 所有的类都必须添加创建者信息。
+    说明：在设置模板时，注意IDEA的@author为${USER}，而eclipse的@author为${user}，大小写有区别，而日期的设置统一为yyyy/MM/dd的格式。

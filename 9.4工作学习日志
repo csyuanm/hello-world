@@ -1,0 +1,20 @@
+1.  if...else if....else 语句
+if(Boolean flag1){  
+//如果flag1为true时，进入这里，执行{}包起来的代码段；如果为false，则继续判断下面的else if条件。  
+}  
+else if(Boolean flag2){  
+//如果flag2为true时，进入这里（当然前提是flag1为false），执行{}包起来的代码段；如果为false，则继续判断下面的else if条件。  
+}  
+else if(Boolean flag3){  
+//同上一个else if，前提是flag1、flag2都为false。  
+}  
+...  
+else{  
+//如果flag1、flag2、flag3...都为false，则执行这里。  
+} 
+
+多个if 跟 if else 的区别：多个if是所有的if都会执行（相当于不带break的switch），if else 是执行到某个判断为真时停止。相当于break
+
+2.判断是jsonobject和jsonArray
+通过首字母是“[”还是“{”来进行判断
+使用的是string.startWith("")进行判断

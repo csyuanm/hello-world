@@ -1,0 +1,11 @@
+一、while 跟 do while 区别
+两者都是用于循环控制，当while（）为真，即括号内的条件为真时，执行{}内的循环体，
+区别在于do while是先执行一遍{}内的语句，在进行条件判断。
+
+二、nlobjSearchFilter过滤器条件
+ new nlobjSearchFilter('internalidnumber',null,'greaterthan',lastId);
+ 第一个参数为内部字段名称
+ 第二个参数为关联的id，可为null
+ 第三个参数为条件判断的表达式。 greatthan大于、 is是、 contains包含 noneof不包括、between在。。之内、onOrAfter在某天之后包括某天......
+ 第四个参数为条件判读的值
+ 第五个为条件判断辅助值，可不填
