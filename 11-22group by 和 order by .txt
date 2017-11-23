@@ -1,0 +1,23 @@
+一、mysql中使用group by和order by和order执行顺序、区别、排序
+
+语句示例：
+SELECT 
+	b.upccode, b.sku, b.goods_name, b.goods_price, a.location_name, a.area, a.location_posid,a.`location_name`,
+	SUM(b.bin_num_onhand), b.bin_num_available,b.brand, b.classify_big,b.classify_small
+    FROM pda_location a 
+    JOIN ns_item_location_bin b ON a.location_internalid = b.location_internalid
+	WHERE AREA = '重庆区'
+    GROUP BY b.`goods_name`, a.`location_name`;
+	
+1.group by 字段时，按group by紧接的字段进行先后顺序排列，并按照第一个字段进行排序
+（没有order by时 相当于默认order by第一个group by字段）
+2.当按照order by多字段进行排序时，以第一个字段优先
+3.先执行group by 再执行order by
+4.order by的字段可以不出现在group by 中
+5.group by和order by 中都可以使用别名
+
+二、concat(列1，列2.。)进行不同字段的拼接
+group_concat（'分隔符'，col1，col1,..）进行分组后同一个字段的拼接
+更多sql函数可以百度sql函数大全
+三、Group By 和 Having, Where ,Order by语句的执行顺序：
+顺序进行执行的：Where, Group By, Having, Order by
