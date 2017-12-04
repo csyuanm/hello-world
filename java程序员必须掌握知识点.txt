@@ -1,0 +1,78 @@
+JAVA
+	语言
+		线程 *
+		并发冲突 *
+		nio *
+	JVM
+		参数 *
+		性能调优 *
+	Spring
+		控制反转 √
+		面向切面 *
+		Spring MVC *
+		Spring Boot √
+	数据库连接
+		Apache Commons Pool *
+		Druid √
+		Hibernate *
+		Mybatis √
+	消息队列
+		Apache Active MQ *
+		Apache Kafka -
+	数据库
+		MySQL √
+		Oracle -
+		PostgreSQL -
+		MongoDB -
+	安全
+		Apache Shiro -
+	缓存
+		Redis *
+		Memcached -
+	网络开发
+		Socket *
+		Netty -
+		HTTP √
+		HTTPS √
+	日志
+		Log4j *
+		Logback √
+	数据处理
+		FastJson √
+		Jackson *
+		Dom4j *
+		Protobuf -
+	服务器
+		Tomcat *
+		JBoss
+		Weblogic -
+	分布式
+		Zookeeper -
+		Docker *
+		Dubbo -
+	前端
+		Javascript √
+		Jquery √
+		Ajax √
+		Bootstrap √
+		Jquery EasyUI *
+	测试
+		JUnit *
+		Spring Test
+	持续集成
+		Jenkins *
+	思想
+		设计模式 *
+		面向对象 √
+		SOA √
+		RESTful √
+	工具
+		Linux √
+		Shell √
+		Python √
+	软件
+		UML √
+		Office  √
+		Visio √
+		Rational Rose -
+		Power Designer -
