@@ -1,0 +1,13 @@
+
+
+ALTER TABLE `cashier_daily_statistics`
+ADD COLUMN `external_card`  varchar(64) NULL AFTER `associated_purchase_rate`;
+
+ALTER TABLE `cashier_daily_statistics`
+ADD COLUMN `external_mobile`  varchar(64) NULL AFTER `external_card`;
+
+ALTER TABLE `pda_transfer`
+ADD COLUMN `type`  varchar(16) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT '1--促销员 0--店长 2--收银员' AFTER `last_update_time`;
+
+
+
